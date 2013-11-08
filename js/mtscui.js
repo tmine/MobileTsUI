@@ -12,6 +12,10 @@ var tsc;
             Stack.prototype.pop = function () {
                 return this.array.pop();
             };
+
+            Stack.prototype.size = function () {
+                return this.array.length;
+            };
             return Stack;
         })();
         util.Stack = Stack;
@@ -234,28 +238,17 @@ var mtscui;
         function Window(page) {
             this.pageStack = new tsc.util.Stack();
 
-            if (page) {
-                page.setWindow(this);
-                this.pageStack.push(page);
-            }
-
             var instance = document.createElement("div");
             instance.setAttribute("class", "mtscui window");
 
-            _super.call(this, instance);
-        }
-        Window.prototype.getDom = function () {
-            var instance = _super.prototype.getDom.call(this);
-
-            var page = this.pageStack.pop();
             if (page) {
+                page.setWindow(this);
                 instance.appendChild(page.getDom());
                 this.pageStack.push(page);
             }
 
-            return instance;
-        };
-
+            _super.call(this, instance);
+        }
         Window.prototype.navigateTo = function (page/* Transition */ ) {
         };
         return Window;
@@ -268,30 +261,9 @@ var mtscui;
             var instance = document.createElement("div");
             instance.setAttribute("class", "mtscui header");
 
-            _super.call(this, instance);
-
             this.left = left;
             this.middle = middle;
             this.right = right;
-        }
-        Header.prototype.setLeft = function (comp) {
-            this.left = comp;
-
-            this.left.getDom().setAttribute("class", "mtscui left");
-        };
-
-        Header.prototype.setMiddle = function (comp) {
-            this.middle = comp;
-
-            this.middle.getDom().setAttribute("class", "mtscui middle");
-        };
-
-        Header.prototype.setRight = function (comp) {
-            this.right = comp;
-        };
-
-        Header.prototype.getDom = function () {
-            var instance = _super.prototype.getDom.call(this);
 
             if (this.left) {
                 var dom = this.left.getDom();
@@ -309,7 +281,38 @@ var mtscui;
                 instance.appendChild(dom);
             }
 
-            return instance;
+            _super.call(this, instance);
+        }
+        Header.prototype.setLeft = function (comp) {
+            this.left = comp;
+
+            var dom = this.left.getDom();
+            dom.setAttribute("class", "mtscui left");
+            if (this.middle)
+                _super.prototype.getDom.call(this).insertBefore(dom, this.middle.getDom());
+else if (this.right)
+                _super.prototype.getDom.call(this).insertBefore(dom, this.right.getDom());
+else
+                _super.prototype.getDom.call(this).appendChild(dom);
+        };
+
+        Header.prototype.setMiddle = function (comp) {
+            this.middle = comp;
+
+            var dom = this.middle.getDom();
+            dom.setAttribute("class", "mtscui middle");
+            if (this.right)
+                _super.prototype.getDom.call(this).insertBefore(dom, this.right.getDom());
+else
+                _super.prototype.getDom.call(this).appendChild(dom);
+        };
+
+        Header.prototype.setRight = function (comp) {
+            this.right = comp;
+
+            var dom = this.right.getDom();
+            dom.setAttribute("class", "mtscui right");
+            _super.prototype.getDom.call(this).appendChild(dom);
         };
         return Header;
     })(tsc.ui.View);
@@ -320,29 +323,21 @@ var mtscui;
         function Component(template, onload) {
             _super.call(this, template, onload);
             this.components = new tsc.util.LinkedList();
+
+            this.dom = document.createElement("div");
+            this.dom.setAttribute("class", "mtscui component");
         }
         Component.prototype.add = function (component) {
-            this.components.add(component);
+            _super.prototype.getDom.call(this).appendChild(component.getDom());
         };
 
         Component.prototype.remove = function (component) {
-            this.components.remove(component);
+            _super.prototype.getDom.call(this).removeChild(component.getDom());
         };
 
         Component.prototype.getDom = function () {
-            var instance = document.createElement("div");
-            instance.setAttribute("class", "mtscui component");
-
-            var dom = _super.prototype.getDom.call(this);
-
-            for (var i = 0; i < this.components.size(); i++) {
-                var component = this.components.get(i);
-                dom.appendChild(component.getDom());
-            }
-
-            instance.appendChild(dom);
-
-            return instance;
+            this.dom.appendChild(_super.prototype.getDom.call(this));
+            return this.dom;
         };
         return Component;
     })(tsc.ui.View);
@@ -359,6 +354,9 @@ var mtscui;
 
             var instance = document.createElement("div");
             instance.setAttribute("class", "mtscui page");
+
+            instance.appendChild(this.header.getDom());
+            instance.appendChild(this.body.getDom());
 
             _super.call(this, instance);
 
@@ -386,15 +384,6 @@ var mtscui;
         Page.prototype.getHeader = function () {
             return this.header;
         };
-
-        Page.prototype.getDom = function () {
-            var instance = _super.prototype.getDom.call(this);
-
-            instance.appendChild(this.header.getDom());
-            instance.appendChild(this.body.getDom());
-
-            return instance;
-        };
         return Page;
     })(tsc.ui.View);
     mtscui.Page = Page;
@@ -407,14 +396,23 @@ var mtscui;
             var old = WindowManager.windowStack.pop();
             if (old) {
                 old.getDom().className = "mtscui window hide";
+
                 WindowManager.windowStack.push(old);
             }
+
+            var windowdom = window.getDom();
+
+            // debug code to see view stack
+            windowdom.style.left = WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+            windowdom.style.top = WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+            windowdom.style.right = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+            windowdom.style.bottom = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
 
             // Add new window to stack
             WindowManager.windowStack.push(window);
 
             // Append new window to body
-            document.body.appendChild(window.getDom());
+            document.body.appendChild(windowdom);
         };
 
         WindowManager.close = function () {
@@ -423,6 +421,7 @@ var mtscui;
             // Remove window from body
             document.body.removeChild(window.getDom());
         };
+        WindowManager.debugViewStackPadding = 0;
         WindowManager.windowStack = new tsc.util.Stack();
         return WindowManager;
     })();
@@ -449,8 +448,12 @@ function createWindow(title, content) {
 }
 
 window.onload = function () {
+    mtscui.WindowManager.debugViewStackPadding = 20;
     createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd");
     setTimeout(function () {
         createWindow("2", "jl hsdflkjhkjdaf kjds");
     }, 1000);
+    setTimeout(function () {
+        createWindow("3", "jl hsdflkjhkjdaf kjds");
+    }, 2000);
 };

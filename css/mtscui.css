@@ -1,3 +1,17 @@
+body {
+	position: relative;
+	width: 310px;
+	margin: 125px auto;
+	background-image: url('http://upload.wikimedia.org/wikipedia/commons/f/fa/IPhone_5.png');
+	background-size: 415px;
+	background-repeat: no-repeat;
+	background-position: center -100px;
+	
+	left: 2px;
+	top: -86px;
+	font-size: 0.4em;
+}
+
 
 *.mtscui .mtscui * {
 	margin: 0;
@@ -9,8 +23,14 @@
 }
 
 .mtscui.window {
-	position: relative;
-	margin: 10px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	border: solid 1px red;
+	background-color: rgba(255, 255, 255, 0.5);
+	overflow: hidden;
 }
 
 .mtscui.window.hide {
@@ -19,7 +39,6 @@
     -o-filter: blur(20px);
     -ms-filter: blur(20px);
     filter: blur(20px);
-    opacity: 0.4;
 }
 
 .mtscui.component {

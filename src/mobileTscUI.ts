@@ -11,27 +11,16 @@ module mtscui {
 		constructor(page? : Page){
 			this.pageStack = new tsc.util.Stack<Page>();
 
-			if(page) {
-				page.setWindow(this);
-				this.pageStack.push(page);
-			}
-
 			var instance : HTMLElement = document.createElement("div");
 			instance.setAttribute("class", "mtscui window");
 
-			super(instance);
-		}
-
-		public getDom() : HTMLElement {
-			var instance = super.getDom();
-
-			var page = this.pageStack.pop();
 			if(page) {
+				page.setWindow(this);
 				instance.appendChild(page.getDom());
 				this.pageStack.push(page);
 			}
 
-			return instance;
+			super(instance);
 		}
 
 		public navigateTo(page: Page /* Transition */) : void {
@@ -49,31 +38,9 @@ module mtscui {
 			var instance : HTMLElement = document.createElement("div");
 			instance.setAttribute("class", "mtscui header");
 
-			super(instance);
-
 			this.left = left;
 			this.middle = middle;
 			this.right = right;
-		}
-
-		public setLeft(comp : Component) : void {
-			this.left = comp;
-
-			this.left.getDom().setAttribute("class", "mtscui left");
-		}
-
-		public setMiddle(comp : Component) : void {
-			this.middle = comp;
-
-			this.middle.getDom().setAttribute("class", "mtscui middle");
-		}
-
-		public setRight(comp : Component) : void {
-			this.right = comp;
-		}
-
-		public getDom() : HTMLElement {
-			var instance = super.getDom();
 
 			if(this.left){
 				var dom = this.left.getDom();
@@ -91,40 +58,60 @@ module mtscui {
 				instance.appendChild(dom);
 			}
 
-			return instance;
+			super(instance);
+		}
+
+		public setLeft(comp : Component) : void {
+			this.left = comp;
+
+			var dom = this.left.getDom();
+			dom.setAttribute("class", "mtscui left");
+			if(this.middle) super.getDom().insertBefore(dom, this.middle.getDom()); 
+			else if(this.right) super.getDom().insertBefore(dom, this.right.getDom()); 
+			else super.getDom().appendChild(dom);
+		}
+
+		public setMiddle(comp : Component) : void {
+			this.middle = comp;
+
+			var dom = this.middle.getDom();
+			dom.setAttribute("class", "mtscui middle");
+			if(this.right) super.getDom().insertBefore(dom, this.right.getDom()); 
+			else super.getDom().appendChild(dom);
+		}
+
+		public setRight(comp : Component) : void {
+			this.right = comp;
+
+			var dom = this.right.getDom();
+			dom.setAttribute("class", "mtscui right");
+			super.getDom().appendChild(dom);
 		}
 	}
 
 	export class Component extends tsc.ui.View{
 		private components : tsc.util.List<Component>;
+		private dom : HTMLElement ;
 
 		constructor(template : any, onload? : Function){
 			super(template, onload);
 			this.components = new tsc.util.LinkedList<Component>();
+
+			this.dom = document.createElement("div");
+			this.dom.setAttribute("class", "mtscui component");
 		}
 
 		public add(component : Component) : void {
-			this.components.add(component);
+			super.getDom().appendChild(component.getDom());
 		}
 
 		public remove(component : Component) : void {
-			this.components.remove(component);
+			super.getDom().removeChild(component.getDom());
 		}
 
 		public getDom() : HTMLElement {
-			var instance : HTMLElement = document.createElement("div");
-			instance.setAttribute("class", "mtscui component");
-
-			var dom = super.getDom();
-
-			for(var i: number = 0; i < this.components.size(); i++){
-				var component : Component = this.components.get(i);
-				dom.appendChild(component.getDom());
-			}
-
-			instance.appendChild(dom);
-
-			return instance;
+			this.dom.appendChild(super.getDom());
+			return this.dom;
 		}
 	}
 
@@ -143,6 +130,9 @@ module mtscui {
 
 			var instance : HTMLElement = document.createElement("div");
 			instance.setAttribute("class", "mtscui page");
+
+			instance.appendChild(this.header.getDom());
+			instance.appendChild(this.body.getDom());
 
 			super(instance);
 
@@ -171,18 +161,10 @@ module mtscui {
 		public getHeader() : Header {
 			return this.header;
 		}
-
-		public getDom() : HTMLElement {
-			var instance : HTMLElement = super.getDom();
-
-			instance.appendChild(this.header.getDom());
-			instance.appendChild(this.body.getDom());
-
-			return instance;
-		}
 	}
 
 	export class WindowManager{
+		public static debugViewStackPadding = 0;
 		private static windowStack : tsc.util.Stack<Window> = new tsc.util.Stack<Window>();
 
 		public static open(window : Window) : void {
@@ -190,13 +172,22 @@ module mtscui {
 			var old : Window = WindowManager.windowStack.pop();
 			if(old) {
 				old.getDom().className = "mtscui window hide";
+
 				WindowManager.windowStack.push(old);
 			}
+
+			var windowdom = window.getDom();
+
+			// debug code to see view stack
+			windowdom.style.left = WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+			windowdom.style.top = WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+			windowdom.style.right = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+			windowdom.style.bottom = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
 
 			// Add new window to stack
 			WindowManager.windowStack.push(window);
 			// Append new window to body
-			document.body.appendChild(window.getDom());
+			document.body.appendChild(windowdom);
 		}
 
 		public static close() : void {
@@ -228,6 +219,8 @@ function createWindow(title, content){
 }
 
 window.onload = function(){
+	mtscui.WindowManager.debugViewStackPadding = 20;
 	createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd");
 	setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds");}, 1000);
+	setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 2000);
 }
