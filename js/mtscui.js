@@ -403,10 +403,10 @@ else
             var windowdom = window.getDom();
 
             // debug code to see view stack
-            windowdom.style.left = WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
-            windowdom.style.top = WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
-            windowdom.style.right = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
-            windowdom.style.bottom = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPadding || 0) + "px";
+            windowdom.style.left = WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingLeft || 0) + "px";
+            windowdom.style.top = WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingTop || 0) + "px";
+            windowdom.style.right = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingLeft || 0) + "px";
+            windowdom.style.bottom = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingTop || 0) + "px";
 
             // Add new window to stack
             WindowManager.windowStack.push(window);
@@ -421,7 +421,8 @@ else
             // Remove window from body
             document.body.removeChild(window.getDom());
         };
-        WindowManager.debugViewStackPadding = 0;
+        WindowManager.debugViewStackPaddingTop = 0;
+        WindowManager.debugViewStackPaddingLeft = 0;
         WindowManager.windowStack = new tsc.util.Stack();
         return WindowManager;
     })();
@@ -448,12 +449,19 @@ function createWindow(title, content) {
 }
 
 window.onload = function () {
-    mtscui.WindowManager.debugViewStackPadding = 20;
-    createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd");
+    mtscui.WindowManager.debugViewStackPaddingTop = -30;
+    mtscui.WindowManager.debugViewStackPaddingLeft = 50;
+    createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ");
     setTimeout(function () {
         createWindow("2", "jl hsdflkjhkjdaf kjds");
     }, 1000);
     setTimeout(function () {
         createWindow("3", "jl hsdflkjhkjdaf kjds");
     }, 2000);
+    setTimeout(function () {
+        createWindow("3", "jl hsdflkjhkjdaf kjds");
+    }, 3000);
+    setTimeout(function () {
+        createWindow("3", "jl hsdflkjhkjdaf kjds");
+    }, 4000);
 };

@@ -1,17 +1,37 @@
+/* Test */
 body {
 	position: relative;
 	width: 310px;
+	height: 530px;
 	margin: 125px auto;
 	background-image: url('http://upload.wikimedia.org/wikipedia/commons/f/fa/IPhone_5.png');
 	background-size: 415px;
 	background-repeat: no-repeat;
-	background-position: center -100px;
+	background-position: center 0px;
 	
 	left: 2px;
-	top: -86px;
+	top: 16px;
 	font-size: 0.4em;
-}
 
+	--background-color: black;
+}
+/*
+.mtscui.window:nth-child(1) {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.mtscui.window:nth-child(2) {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+*/
+
+.mtscui.window.hide {
+	-webkit-filter: blur(2px) !important;
+    -moz-filter: blur(2px) !important;
+    -o-filter: blur(2px) !important;
+    -ms-filter: blur(2px) !important;
+    filter: blur(2px) !important;
+}
+/* end Test */
 
 *.mtscui .mtscui * {
 	margin: 0;
@@ -75,8 +95,6 @@ body {
 	text-align: left;
 }
 .mtscui.window .mtscui.page .mtscui.header .mtscui.middle {
-	padding-left: 15%;
-	padding-right: 15%;
 	width: 70%;
 	text-align: center;
 	white-space: nowrap;
