@@ -24,73 +24,6 @@ var tsc;
 })(tsc || (tsc = {}));
 var tsc;
 (function (tsc) {
-    /// <reference path="List.ts"/>
-    (function (util) {
-        var ListNode = (function () {
-            function ListNode(item) {
-                this.item = item;
-            }
-            return ListNode;
-        })();
-
-        var LinkedList = (function () {
-            function LinkedList() {
-                this.listsize = 0;
-            }
-            LinkedList.prototype.add = function (item) {
-                if (this.first == null)
-                    this.first = new ListNode(item);
-
-                var last = this.first;
-                while (last.next != null) {
-                    last = last.next;
-                }
-                last.next = new ListNode(item);
-                last.next.prev = last;
-
-                this.listsize++;
-            };
-            LinkedList.prototype.remove = function (item) {
-                if (this.first == null)
-                    return;
-
-                var node = this.first;
-                while (node.next != null) {
-                    if (node.item == item) {
-                        node.prev.next = node.next;
-                        node.next.prev = node.prev;
-                        break;
-                    }
-                    node = node.next;
-                }
-
-                this.listsize--;
-            };
-            LinkedList.prototype.get = function (index) {
-                index++;
-                if (index == 0)
-                    return null;
-
-                var node = this.first;
-                for (var i = 0; i < index; i++) {
-                    if (node.next == null)
-                        return null;
-else
-                        node = node.next;
-                }
-                return node.item;
-            };
-            LinkedList.prototype.size = function () {
-                return this.listsize;
-            };
-            return LinkedList;
-        })();
-        util.LinkedList = LinkedList;
-    })(tsc.util || (tsc.util = {}));
-    var util = tsc.util;
-})(tsc || (tsc = {}));
-var tsc;
-(function (tsc) {
     (function (ui) {
         if (!XMLHttpRequest) {
             XMLHttpRequest = ActiveXObject("Microsoft.XMLHTTP");
@@ -221,10 +154,76 @@ var tsc;
     })(tsc.ui || (tsc.ui = {}));
     var ui = tsc.ui;
 })(tsc || (tsc = {}));
-/// <reference path="../tsc/util/Stack.ts"/>
-/// <reference path="../tsc/util/List.ts"/>
-/// <reference path="../tsc/util/LinkedList.ts"/>
-/// <reference path="../tsc/ui/View.ts"/>
+var tsc;
+(function (tsc) {
+    /// <reference path="List.ts"/>
+    (function (util) {
+        var ListNode = (function () {
+            function ListNode(item) {
+                this.item = item;
+            }
+            return ListNode;
+        })();
+
+        var LinkedList = (function () {
+            function LinkedList() {
+                this.listsize = 0;
+            }
+            LinkedList.prototype.add = function (item) {
+                if (this.first == null)
+                    this.first = new ListNode(item);
+
+                var last = this.first;
+                while (last.next != null) {
+                    last = last.next;
+                }
+                last.next = new ListNode(item);
+                last.next.prev = last;
+
+                this.listsize++;
+            };
+            LinkedList.prototype.remove = function (item) {
+                if (this.first == null)
+                    return;
+
+                var node = this.first;
+                while (node.next != null) {
+                    if (node.item == item) {
+                        node.prev.next = node.next;
+                        node.next.prev = node.prev;
+                        break;
+                    }
+                    node = node.next;
+                }
+
+                this.listsize--;
+            };
+            LinkedList.prototype.get = function (index) {
+                index++;
+                if (index == 0)
+                    return null;
+
+                var node = this.first;
+                for (var i = 0; i < index; i++) {
+                    if (node.next == null)
+                        return null;
+else
+                        node = node.next;
+                }
+                return node.item;
+            };
+            LinkedList.prototype.size = function () {
+                return this.listsize;
+            };
+            return LinkedList;
+        })();
+        util.LinkedList = LinkedList;
+    })(tsc.util || (tsc.util = {}));
+    var util = tsc.util;
+})(tsc || (tsc = {}));
+/// <reference path="../../tsc/util/List.ts"/>
+/// <reference path="../../tsc/util/LinkedList.ts"/>
+/// <reference path="../../tsc/ui/View.ts"/>
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -233,28 +232,35 @@ var __extends = this.__extends || function (d, b) {
 };
 var mtscui;
 (function (mtscui) {
-    var Window = (function (_super) {
-        __extends(Window, _super);
-        function Window(page) {
-            this.pageStack = new tsc.util.Stack();
+    var Component = (function (_super) {
+        __extends(Component, _super);
+        function Component(template, onload) {
+            _super.call(this, template, onload);
+            this.components = new tsc.util.LinkedList();
 
-            var instance = document.createElement("div");
-            instance.setAttribute("class", "mtscui window");
-
-            if (page) {
-                page.setWindow(this);
-                instance.appendChild(page.getDom());
-                this.pageStack.push(page);
-            }
-
-            _super.call(this, instance);
+            this.dom = document.createElement("div");
+            this.dom.setAttribute("class", "mtscui component");
         }
-        Window.prototype.navigateTo = function (page/* TODO: Transition */ ) {
+        Component.prototype.add = function (component) {
+            _super.prototype.getDom.call(this).appendChild(component.getDom());
         };
-        return Window;
-    })(tsc.ui.View);
-    mtscui.Window = Window;
 
+        Component.prototype.remove = function (component) {
+            _super.prototype.getDom.call(this).removeChild(component.getDom());
+        };
+
+        Component.prototype.getDom = function () {
+            this.dom.appendChild(_super.prototype.getDom.call(this));
+            return this.dom;
+        };
+        return Component;
+    })(tsc.ui.View);
+    mtscui.Component = Component;
+})(mtscui || (mtscui = {}));
+/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="Component.ts"/>
+var mtscui;
+(function (mtscui) {
     var Header = (function (_super) {
         __extends(Header, _super);
         function Header(left, middle, right) {
@@ -317,40 +323,21 @@ else
         return Header;
     })(tsc.ui.View);
     mtscui.Header = Header;
-
-    var Component = (function (_super) {
-        __extends(Component, _super);
-        function Component(template, onload) {
-            _super.call(this, template, onload);
-            this.components = new tsc.util.LinkedList();
-
-            this.dom = document.createElement("div");
-            this.dom.setAttribute("class", "mtscui component");
-        }
-        Component.prototype.add = function (component) {
-            _super.prototype.getDom.call(this).appendChild(component.getDom());
-        };
-
-        Component.prototype.remove = function (component) {
-            _super.prototype.getDom.call(this).removeChild(component.getDom());
-        };
-
-        Component.prototype.getDom = function () {
-            this.dom.appendChild(_super.prototype.getDom.call(this));
-            return this.dom;
-        };
-        return Component;
-    })(tsc.ui.View);
-    mtscui.Component = Component;
-
+})(mtscui || (mtscui = {}));
+/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="Header.ts"/>
+/// <reference path="Component.ts"/>
+/// <reference path="Window.ts"/>
+var mtscui;
+(function (mtscui) {
     var Page = (function (_super) {
         __extends(Page, _super);
         function Page(title) {
-            this.header = new Header();
+            this.header = new mtscui.Header();
 
             var body = document.createElement("div");
             body.setAttribute("class", "mtscui content");
-            this.body = new Component(body);
+            this.body = new mtscui.Component(body);
 
             var instance = document.createElement("div");
             instance.setAttribute("class", "mtscui page");
@@ -367,7 +354,7 @@ else
             var titleNode = document.createTextNode(title.toString());
             node.appendChild(titleNode);
 
-            this.header.setMiddle(new Component(node));
+            this.header.setMiddle(new mtscui.Component(node));
         }
         Page.prototype.setWindow = function (window) {
             this.window = window;
@@ -387,7 +374,38 @@ else
         return Page;
     })(tsc.ui.View);
     mtscui.Page = Page;
+})(mtscui || (mtscui = {}));
+/// <reference path="../../tsc/util/Stack.ts"/>
+/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="Page.ts"/>
+var mtscui;
+(function (mtscui) {
+    var Window = (function (_super) {
+        __extends(Window, _super);
+        function Window(page) {
+            this.pageStack = new tsc.util.Stack();
 
+            var instance = document.createElement("div");
+            instance.setAttribute("class", "mtscui window");
+
+            if (page) {
+                page.setWindow(this);
+                instance.appendChild(page.getDom());
+                this.pageStack.push(page);
+            }
+
+            _super.call(this, instance);
+        }
+        Window.prototype.navigateTo = function (page/* TODO: Transition */ ) {
+        };
+        return Window;
+    })(tsc.ui.View);
+    mtscui.Window = Window;
+})(mtscui || (mtscui = {}));
+/// <reference path="../../tsc/util/Stack.ts"/>
+/// <reference path="Window.ts"/>
+var mtscui;
+(function (mtscui) {
     var WindowManager = (function () {
         function WindowManager() {
         }
@@ -418,7 +436,9 @@ else
     })();
     mtscui.WindowManager = WindowManager;
 })(mtscui || (mtscui = {}));
-
+/// <reference path="mtscui/Window.ts"/>
+/// <reference path="mtscui/WindowManager.ts"/>
+/// <reference path="mtscui/Page.ts"/>
 function createSimpleTextComponent(text) {
     var node = document.createElement("h1");
     var title = text || "";
