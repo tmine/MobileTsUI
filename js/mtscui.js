@@ -249,7 +249,7 @@ var mtscui;
 
             _super.call(this, instance);
         }
-        Window.prototype.navigateTo = function (page/* Transition */ ) {
+        Window.prototype.navigateTo = function (page/* TODO: Transition */ ) {
         };
         return Window;
     })(tsc.ui.View);
@@ -391,7 +391,7 @@ else
     var WindowManager = (function () {
         function WindowManager() {
         }
-        WindowManager.open = function (window) {
+        WindowManager.open = function (window/* TODO: Type (Modal, Fullscreen, normal) */ ) {
             // hide other window if exist
             var old = WindowManager.windowStack.pop();
             if (old) {
@@ -400,19 +400,11 @@ else
                 WindowManager.windowStack.push(old);
             }
 
-            var windowdom = window.getDom();
-
-            // debug code to see view stack
-            windowdom.style.left = WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingLeft || 0) + "px";
-            windowdom.style.top = WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingTop || 0) + "px";
-            windowdom.style.right = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingLeft || 0) + "px";
-            windowdom.style.bottom = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingTop || 0) + "px";
-
             // Add new window to stack
             WindowManager.windowStack.push(window);
 
             // Append new window to body
-            document.body.appendChild(windowdom);
+            document.body.appendChild(window.getDom());
         };
 
         WindowManager.close = function () {
@@ -421,8 +413,6 @@ else
             // Remove window from body
             document.body.removeChild(window.getDom());
         };
-        WindowManager.debugViewStackPaddingTop = 0;
-        WindowManager.debugViewStackPaddingLeft = 0;
         WindowManager.windowStack = new tsc.util.Stack();
         return WindowManager;
     })();
@@ -449,8 +439,6 @@ function createWindow(title, content) {
 }
 
 window.onload = function () {
-    mtscui.WindowManager.debugViewStackPaddingTop = -30;
-    mtscui.WindowManager.debugViewStackPaddingLeft = 50;
     createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ");
     setTimeout(function () {
         createWindow("2", "jl hsdflkjhkjdaf kjds");

@@ -23,7 +23,7 @@ module mtscui {
 			super(instance);
 		}
 
-		public navigateTo(page: Page /* Transition */) : void {
+		public navigateTo(page: Page /* TODO: Transition */) : void {
 
 		}
 
@@ -164,11 +164,9 @@ module mtscui {
 	}
 
 	export class WindowManager{
-		public static debugViewStackPaddingTop = 0;
-		public static debugViewStackPaddingLeft = 0;
 		private static windowStack : tsc.util.Stack<Window> = new tsc.util.Stack<Window>();
 
-		public static open(window : Window) : void {
+		public static open(window : Window /* TODO: Type (Modal, Fullscreen, normal) */) : void {
 			// hide other window if exist
 			var old : Window = WindowManager.windowStack.pop();
 			if(old) {
@@ -177,18 +175,10 @@ module mtscui {
 				WindowManager.windowStack.push(old);
 			}
 
-			var windowdom = window.getDom();
-
-			// debug code to see view stack
-			windowdom.style.left = WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingLeft || 0) + "px";
-			windowdom.style.top = WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingTop || 0) + "px";
-			windowdom.style.right = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingLeft || 0) + "px";
-			windowdom.style.bottom = -WindowManager.windowStack.size() * (WindowManager.debugViewStackPaddingTop || 0) + "px";
-
 			// Add new window to stack
 			WindowManager.windowStack.push(window);
 			// Append new window to body
-			document.body.appendChild(windowdom);
+			document.body.appendChild(window.getDom());
 		}
 
 		public static close() : void {
@@ -220,8 +210,6 @@ function createWindow(title, content){
 }
 
 window.onload = function(){
-	mtscui.WindowManager.debugViewStackPaddingTop = -30;
-	mtscui.WindowManager.debugViewStackPaddingLeft = 50;
 	createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ");
 	setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds");}, 1000);
 	setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 2000);
