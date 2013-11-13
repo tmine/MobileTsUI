@@ -341,17 +341,17 @@ var mtscui;
         function Page(title) {
             this.header = new mtscui.Header();
 
+            this.div = document.createElement("div");
+            this.div.setAttribute("class", "mtscui page");
+
+            this.div.appendChild(this.header.getDom());
+
             var body = document.createElement("div");
             body.setAttribute("class", "mtscui content");
-            this.body = new mtscui.Component(body);
 
-            var instance = document.createElement("div");
-            instance.setAttribute("class", "mtscui page");
+            _super.call(this, body);
 
-            instance.appendChild(this.header.getDom());
-            instance.appendChild(this.body.getDom());
-
-            _super.call(this, instance);
+            this.div.appendChild(_super.prototype.getDom.call(this));
 
             this.title = title;
 
@@ -365,15 +365,6 @@ var mtscui;
         Page.prototype.setWindow = function (window) {
             this.window = window;
         };
-
-        Page.prototype.add = function (component) {
-            this.body.add(component);
-        };
-
-        Page.prototype.remove = function (component) {
-            this.body.remove(component);
-        };
-
         Page.prototype.getHeader = function () {
             return this.header;
         };
@@ -381,8 +372,12 @@ var mtscui;
         Page.prototype.getWindow = function () {
             return this.window;
         };
+
+        Page.prototype.getDom = function () {
+            return this.div;
+        };
         return Page;
-    })(tsc.ui.View);
+    })(mtscui.Component);
     mtscui.Page = Page;
 })(mtscui || (mtscui = {}));
 /// <reference path="../../tsc/util/Stack.ts"/>
@@ -455,11 +450,11 @@ var mtscui;
     var WindowManager = (function () {
         function WindowManager() {
         }
-        WindowManager.open = function (window/* TODO: Type (Modal, Fullscreen, normal) */ ) {
+        WindowManager.open = function (window) {
             // hide other window if exist
             var old = WindowManager.windowStack.pop();
             if (old) {
-                old.getDom().className = "mtscui window hide";
+                old.getDom().className += " hide";
 
                 WindowManager.windowStack.push(old);
             }
@@ -471,11 +466,40 @@ var mtscui;
             document.body.appendChild(window.getDom());
         };
 
+        WindowManager.openFullscreen = function (window) {
+            window.getDom().className += " fullscreen";
+            WindowManager.open(window);
+        };
+
+        WindowManager.openModal = function (window) {
+            var temp = new mtscui.Window();
+            temp.getDom().className += " modal";
+            temp.getDom().appendChild(window.getDom());
+
+            temp.getDom().onclick = function () {
+                WindowManager.close();
+            };
+
+            window.getDom().onclick = function () {
+                console.log("blubber");
+                if (event.stopPropagation)
+                    event.stopPropagation();
+                if (event)
+                    event.cancelBubble = true;
+            };
+
+            WindowManager.open(temp);
+        };
+
         WindowManager.close = function () {
             var window = WindowManager.windowStack.pop();
 
             // Remove window from body
             document.body.removeChild(window.getDom());
+
+            var window = WindowManager.windowStack.pop();
+            window.getDom().className = window.getDom().className.replace(" hide", "");
+            WindowManager.windowStack.push(window);
         };
         WindowManager.windowStack = new tsc.util.Stack();
         return WindowManager;
@@ -549,10 +573,50 @@ else
     })();
     mtscui.Menu = Menu;
 })(mtscui || (mtscui = {}));
+/// <reference path="Window.ts"/>
+/// <reference path="WindowManager.ts"/>
+/// <reference path="Component.ts"/>
+/// <reference path="Page.ts"/>
+var mtscui;
+(function (mtscui) {
+    var Popup = (function (_super) {
+        __extends(Popup, _super);
+        function Popup(title, component) {
+            var page = new mtscui.Page(title);
+            if (component)
+                page.add(component);
+            _super.call(this, page);
+
+            this.getDom().className += " popup";
+
+            mtscui.WindowManager.openModal(this);
+        }
+        return Popup;
+    })(mtscui.Window);
+    mtscui.Popup = Popup;
+
+    var AlertBox = (function (_super) {
+        __extends(AlertBox, _super);
+        function AlertBox(title, text, callback) {
+            var component = new mtscui.Component(document.createElement("div"));
+
+            var textelem = document.createElement("p");
+            var textnode = document.createTextNode("" + text);
+            textelem.appendChild(textnode);
+
+            component.add(new mtscui.Component(textelem));
+
+            _super.call(this, title, component);
+        }
+        return AlertBox;
+    })(Popup);
+    mtscui.AlertBox = AlertBox;
+})(mtscui || (mtscui = {}));
 /// <reference path="mtscui/Window.ts"/>
 /// <reference path="mtscui/WindowManager.ts"/>
 /// <reference path="mtscui/Page.ts"/>
 /// <reference path="mtscui/Menu.ts"/>
+/// <reference path="mtscui/AlertBox.ts"/>
 function createSimpleTextComponent(text) {
     var node = document.createElement("h1");
     var title = text || "";
@@ -575,7 +639,7 @@ function createMenu(mypage, title, position) {
     new mtscui.Menu(mypage, mymenuicon, mymenupage, position);
 }
 
-function createWindow(title, content) {
+function createWindow(title, content, modal) {
     var mypage = new mtscui.Page(title);
     var mywindow = new mtscui.Window(mypage);
 
@@ -587,6 +651,7 @@ function createWindow(title, content) {
     var link = document.createElement("div");
     link.setAttribute("class", "fa fa-arrow-right");
     link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+    link.innerHTML = "goto";
     link.onclick = function () {
         var newpage = new mtscui.Page("New Page");
         mypage.getWindow().navigateTo(newpage);
@@ -594,6 +659,7 @@ function createWindow(title, content) {
         var link = document.createElement("div");
         link.setAttribute("class", "fa fa-arrow-left");
         link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+        link.innerHTML = "back";
         link.onclick = function () {
             newpage.getWindow().back();
         };
@@ -601,11 +667,34 @@ function createWindow(title, content) {
     };
     mypage.add(new mtscui.Component(link));
 
-    mtscui.WindowManager.open(mywindow);
+    var linkmodal = document.createElement("div");
+    linkmodal.setAttribute("class", "fa fa-arrow-up");
+    linkmodal.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+    linkmodal.innerHTML = "open modal";
+    linkmodal.onclick = function () {
+        createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", true);
+    };
+    mypage.add(new mtscui.Component(linkmodal));
+
+    var linkalert = document.createElement("div");
+    linkalert.setAttribute("class", "fa fa-arrow-up");
+    linkalert.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+    linkalert.innerHTML = "open AlertBox";
+    linkalert.onclick = function () {
+        new mtscui.AlertBox("Achtung", "Achtung text", function () {
+            console.log("alert ok");
+        });
+    };
+    mypage.add(new mtscui.Component(linkalert));
+
+    if (modal)
+        mtscui.WindowManager.openModal(mywindow);
+else
+        mtscui.WindowManager.openFullscreen(mywindow);
 }
 
 window.onload = function () {
-    createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ");
+    createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
     /*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds");}, 1000);
     setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 2000);
     setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 3000);

@@ -4,26 +4,27 @@
 /// <reference path="Window.ts"/>
 
 module mtscui {
-	export class Page extends tsc.ui.View{
+	export class Page extends Component{
 		private title : String;
 		private window : Window;
 		private header : Header;
 		private body : Component;
+		private div : HTMLElement;
 
 		constructor(title? : String){
 			this.header = new Header();
 
+			this.div = document.createElement("div");
+			this.div.setAttribute("class", "mtscui page");
+
+			this.div.appendChild(this.header.getDom());
+
 			var body : HTMLElement = document.createElement("div");
 			body.setAttribute("class", "mtscui content");
-			this.body = new Component(body);
 
-			var instance : HTMLElement = document.createElement("div");
-			instance.setAttribute("class", "mtscui page");
+			super(body);
 
-			instance.appendChild(this.header.getDom());
-			instance.appendChild(this.body.getDom());
-
-			super(instance);
+			this.div.appendChild(super.getDom());
 
 			this.title = title;
 
@@ -38,21 +39,16 @@ module mtscui {
 		public setWindow(window : Window){
 			this.window = window;
 		}
-
-		public add(component : Component) : void {
-			this.body.add(component);
-		}
-
-		public remove(component : Component) : void {
-			this.body.remove(component);
-		}
-
 		public getHeader() : Header {
 			return this.header;
 		}
 
 		public getWindow() : Window {
 			return this.window;
+		}
+
+		public getDom() : HTMLElement {
+			return this.div;
 		}
 	}
 }

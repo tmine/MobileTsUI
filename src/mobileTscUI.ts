@@ -3,6 +3,7 @@
 /// <reference path="mtscui/WindowManager.ts"/>
 /// <reference path="mtscui/Page.ts"/>
 /// <reference path="mtscui/Menu.ts"/>
+/// <reference path="mtscui/AlertBox.ts"/>
 
 
 function createSimpleTextComponent(text : String){
@@ -27,7 +28,7 @@ function createMenu(mypage, title, position){
 	new mtscui.Menu(mypage, mymenuicon, mymenupage, position);
 }
 
-function createWindow(title, content){
+function createWindow(title, content, modal){
 	var mypage = new mtscui.Page(title);
 	var mywindow = new mtscui.Window(mypage);
 	
@@ -39,6 +40,7 @@ function createWindow(title, content){
 	var link = document.createElement("div");
 	link.setAttribute("class", "fa fa-arrow-right");
 	link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+	link.innerHTML = "goto";
 	link.onclick = function(){
 		var newpage = new mtscui.Page("New Page");
 		mypage.getWindow().navigateTo(newpage);
@@ -46,6 +48,7 @@ function createWindow(title, content){
 		var link = document.createElement("div");
 		link.setAttribute("class", "fa fa-arrow-left");
 		link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+		link.innerHTML = "back";
 		link.onclick = function(){
 			newpage.getWindow().back();
 		};
@@ -53,11 +56,33 @@ function createWindow(title, content){
 	};
 	mypage.add(new mtscui.Component(link));
 
-	mtscui.WindowManager.open(mywindow);
+
+	var linkmodal = document.createElement("div");
+	linkmodal.setAttribute("class", "fa fa-arrow-up");
+	linkmodal.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+	linkmodal.innerHTML = "open modal";
+	linkmodal.onclick = function(){
+		createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", true);
+	};
+	mypage.add(new mtscui.Component(linkmodal));
+
+	var linkalert = document.createElement("div");
+	linkalert.setAttribute("class", "fa fa-arrow-up");
+	linkalert.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+	linkalert.innerHTML = "open AlertBox";
+	linkalert.onclick = function(){
+		new mtscui.AlertBox("Achtung", "Achtung text", function(){
+			console.log("alert ok");
+		});
+	};
+	mypage.add(new mtscui.Component(linkalert));
+
+	if(modal) mtscui.WindowManager.openModal(mywindow);
+	else  mtscui.WindowManager.openFullscreen(mywindow);
 }
 
 window.onload = function(){
-	createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ");
+	createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
 	/*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds");}, 1000);
 	setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 2000);
 	setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 3000);
