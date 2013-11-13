@@ -234,8 +234,8 @@ var mtscui;
 (function (mtscui) {
     var Component = (function (_super) {
         __extends(Component, _super);
-        function Component(template, onload) {
-            _super.call(this, template, onload);
+        function Component(template) {
+            _super.call(this, template);
             this.components = new tsc.util.LinkedList();
 
             this.dom = document.createElement("div");
@@ -271,49 +271,55 @@ var mtscui;
             this.middle = middle;
             this.right = right;
 
-            if (this.left) {
-                var dom = this.left.getDom();
-                dom.setAttribute("class", "mtscui left");
-                instance.appendChild(dom);
+            if (!this.left) {
+                var dom = document.createElement("span");
+                this.left = new mtscui.Component(dom);
             }
-            if (this.middle) {
-                var dom = this.middle.getDom();
-                dom.setAttribute("class", "mtscui middle");
-                instance.appendChild(dom);
+            var dom = this.left.getDom();
+            dom.setAttribute("class", "mtscui left");
+            instance.appendChild(dom);
+
+            if (!this.middle) {
+                var dom = document.createElement("span");
+                this.middle = new mtscui.Component(dom);
             }
-            if (this.right) {
-                var dom = this.right.getDom();
-                dom.setAttribute("class", "mtscui right");
-                instance.appendChild(dom);
+            var dom = this.middle.getDom();
+            dom.setAttribute("class", "mtscui middle");
+            instance.appendChild(dom);
+
+            if (!this.right) {
+                var dom = document.createElement("span");
+                this.right = new mtscui.Component(dom);
             }
+            var dom = this.right.getDom();
+            dom.setAttribute("class", "mtscui right");
+            instance.appendChild(dom);
 
             _super.call(this, instance);
         }
         Header.prototype.setLeft = function (comp) {
+            _super.prototype.getDom.call(this).removeChild(this.left.getDom());
+
             this.left = comp;
 
             var dom = this.left.getDom();
             dom.setAttribute("class", "mtscui left");
-            if (this.middle)
-                _super.prototype.getDom.call(this).insertBefore(dom, this.middle.getDom());
-else if (this.right)
-                _super.prototype.getDom.call(this).insertBefore(dom, this.right.getDom());
-else
-                _super.prototype.getDom.call(this).appendChild(dom);
+            _super.prototype.getDom.call(this).insertBefore(dom, this.middle.getDom());
         };
 
         Header.prototype.setMiddle = function (comp) {
+            _super.prototype.getDom.call(this).removeChild(this.middle.getDom());
+
             this.middle = comp;
 
             var dom = this.middle.getDom();
             dom.setAttribute("class", "mtscui middle");
-            if (this.right)
-                _super.prototype.getDom.call(this).insertBefore(dom, this.right.getDom());
-else
-                _super.prototype.getDom.call(this).appendChild(dom);
+            _super.prototype.getDom.call(this).insertBefore(dom, this.right.getDom());
         };
 
         Header.prototype.setRight = function (comp) {
+            _super.prototype.getDom.call(this).removeChild(this.right.getDom());
+
             this.right = comp;
 
             var dom = this.right.getDom();
@@ -371,6 +377,10 @@ var mtscui;
         Page.prototype.getHeader = function () {
             return this.header;
         };
+
+        Page.prototype.getWindow = function () {
+            return this.window;
+        };
         return Page;
     })(tsc.ui.View);
     mtscui.Page = Page;
@@ -397,6 +407,42 @@ var mtscui;
             _super.call(this, instance);
         }
         Window.prototype.navigateTo = function (page/* TODO: Transition */ ) {
+            var oldPage = this.pageStack.pop();
+            this.pageStack.push(oldPage);
+
+            page.setWindow(this);
+            _super.prototype.getDom.call(this).appendChild(page.getDom());
+            page.getDom().className += " transition slide hide right";
+
+            setTimeout(function () {
+                page.getDom().className = page.getDom().className.replace(" transition slide hide right", " transition slide hide in");
+            }, 0);
+
+            setTimeout(function () {
+                page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
+            }, 1000);
+
+            oldPage.getDom().className += " transition slide hide left";
+
+            this.pageStack.push(page);
+        };
+
+        Window.prototype.back = function () {
+            var oldPage = this.pageStack.pop();
+            var page = this.pageStack.pop();
+            this.pageStack.push(page);
+
+            oldPage.getDom().className += " transition slide hide right";
+
+            var superdom = _super.prototype.getDom.call(this);
+            setTimeout(function () {
+                page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
+            }, 0);
+
+            setTimeout(function () {
+                superdom.removeChild(oldPage.getDom());
+                page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
+            }, 1000);
         };
         return Window;
     })(tsc.ui.View);
@@ -436,9 +482,77 @@ var mtscui;
     })();
     mtscui.WindowManager = WindowManager;
 })(mtscui || (mtscui = {}));
+/// <reference path="Component.ts"/>
+/// <reference path="Page.ts"/>
+/// <reference path="Header.ts"/>
+/// <reference path="Window.ts"/>
+var mtscui;
+(function (mtscui) {
+    var Menu = (function () {
+        function Menu(page, icon, content, position) {
+            this.page = page;
+            this.position = position;
+
+            var header = this.page.getHeader();
+            if (position === "left")
+                header.setLeft(icon);
+else if (position === "right")
+                header.setRight(icon);
+
+            this.menu = document.createElement("div");
+            this.menu.setAttribute("class", "mtscui menu page " + position);
+            this.menu.appendChild(content.getDom());
+
+            var window = this.page.getWindow();
+            window.getDom().appendChild(this.menu);
+
+            var _this = this;
+            icon.getDom().onclick = function () {
+                _this.toggle();
+            };
+        }
+        Menu.prototype.toggle = function () {
+            if (this.visible)
+                this.hide();
+else
+                this.show();
+        };
+
+        Menu.prototype.show = function () {
+            if (this.menu.className.indexOf("show") == -1)
+                this.menu.className += " show";
+            if (this.page.getDom().className.indexOf("hide " + this.position) == -1)
+                this.page.getDom().className += " hide " + this.position;
+
+            var _this = this;
+            setTimeout(function () {
+                _this.page.getDom().onclick = function () {
+                    _this.toggle();
+                };
+            }, 0);
+
+            this.visible = true;
+        };
+
+        Menu.prototype.hide = function () {
+            if (this.menu.className.indexOf(" show") != -1)
+                this.menu.className = this.menu.className.replace(" show", "");
+            if (this.page.getDom().className.indexOf(" hide " + this.position) != -1)
+                this.page.getDom().className = this.page.getDom().className.replace(" hide " + this.position, "");
+
+            this.page.getDom().onclick = function () {
+            };
+
+            this.visible = false;
+        };
+        return Menu;
+    })();
+    mtscui.Menu = Menu;
+})(mtscui || (mtscui = {}));
 /// <reference path="mtscui/Window.ts"/>
 /// <reference path="mtscui/WindowManager.ts"/>
 /// <reference path="mtscui/Page.ts"/>
+/// <reference path="mtscui/Menu.ts"/>
 function createSimpleTextComponent(text) {
     var node = document.createElement("h1");
     var title = text || "";
@@ -448,28 +562,52 @@ function createSimpleTextComponent(text) {
     return new mtscui.Component(node);
 }
 
+function createMenu(mypage, title, position) {
+    var page = document.createElement("h1");
+    page.innerHTML = "Blubber";
+    var mymenupage = new mtscui.Component(page);
+
+    var icon = document.createElement("span");
+    icon.setAttribute("class", "fa fa-align-justify");
+    icon.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+    var mymenuicon = new mtscui.Component(icon);
+
+    new mtscui.Menu(mypage, mymenuicon, mymenupage, position);
+}
+
 function createWindow(title, content) {
     var mypage = new mtscui.Page(title);
-    mypage.getHeader().setLeft(createSimpleTextComponent("LEFT"));
-    mypage.getHeader().setRight(createSimpleTextComponent("RIGHT"));
+    var mywindow = new mtscui.Window(mypage);
+
+    createMenu(mypage, "LEFT", "left");
+    createMenu(mypage, "RIGHT", "right");
+
     mypage.add(createSimpleTextComponent(content));
 
-    var mywindow = new mtscui.Window(mypage);
+    var link = document.createElement("div");
+    link.setAttribute("class", "fa fa-arrow-right");
+    link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+    link.onclick = function () {
+        var newpage = new mtscui.Page("New Page");
+        mypage.getWindow().navigateTo(newpage);
+
+        var link = document.createElement("div");
+        link.setAttribute("class", "fa fa-arrow-left");
+        link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
+        link.onclick = function () {
+            newpage.getWindow().back();
+        };
+        newpage.add(new mtscui.Component(link));
+    };
+    mypage.add(new mtscui.Component(link));
+
     mtscui.WindowManager.open(mywindow);
 }
 
 window.onload = function () {
     createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ");
-    setTimeout(function () {
-        createWindow("2", "jl hsdflkjhkjdaf kjds");
-    }, 1000);
-    setTimeout(function () {
-        createWindow("3", "jl hsdflkjhkjdaf kjds");
-    }, 2000);
-    setTimeout(function () {
-        createWindow("3", "jl hsdflkjhkjdaf kjds");
-    }, 3000);
-    setTimeout(function () {
-        createWindow("3", "jl hsdflkjhkjdaf kjds");
-    }, 4000);
+    /*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds");}, 1000);
+    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 2000);
+    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 3000);
+    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 4000);*/
 };

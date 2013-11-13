@@ -16,6 +16,10 @@ body.debug {
 	--background-color: black;
 }
 
+.debug .mtscui.window .mtscui.header {
+	position: absolute;
+}
+
 .debug .mtscui.window:nth-child(2) {
 	left: 20px;
 	top: -20px;
@@ -111,6 +115,64 @@ body.debug {
 	right: 0;
 	left: 0;
 	bottom: 0;
+
+	opacity: 1;
+	transition: all 1s;
+}
+
+.mtscui.window .mtscui.page.transition.slide.hide.left {
+	left: -110%;
+	right: 110%;
+	opacity: 0;
+}
+.mtscui.window .mtscui.page.transition.slide.right {
+	left: 110%;
+	right: -110%;
+	opacity: 0;
+}
+.mtscui.window .mtscui.page.transition.slide.in .mtscui.header {
+	position: fixed;
+}
+
+
+/* Menu */
+.mtscui.window .mtscui.menu.page {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 80%;
+	height: 100%;
+	left: auto;
+	right: auto;
+
+	padding-top: 0;
+
+	background-color: rgba(0, 0, 255, 0.5);
+}
+
+.mtscui.window .mtscui.menu.page.right {
+	right: -80%;
+}
+.mtscui.window .mtscui.page.right.hide {
+	right: 80%;
+	left: -80%;
+}
+
+
+.mtscui.window .mtscui.menu.page.left {
+	left: -80%;
+}
+.mtscui.window .mtscui.page.left.hide {
+	left: 80%;
+	right: -80%;
+}
+
+.mtscui.window .mtscui.menu.page.right.show {
+	right: 0;
+}
+
+.mtscui.window .mtscui.menu.page.left.show {
+	left: 0;
 }
 
 /* Page Header */
@@ -127,7 +189,7 @@ body.debug {
 	width: 15%;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	display: inline-block;
+	float: left;
 	height: 40px;
 	text-align: left;
 }
@@ -136,7 +198,7 @@ body.debug {
 	text-align: center;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	display: inline-block;
+	float: left;
 	height: 40px;
 }
 
@@ -145,7 +207,7 @@ body.debug {
 	width: 15%;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	display: inline-block;
+	float: left;
 	height: 40px;
 	text-align: right;
 }

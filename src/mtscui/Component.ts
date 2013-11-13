@@ -7,8 +7,8 @@ module mtscui {
 		private components : tsc.util.List<Component>;
 		private dom : HTMLElement ;
 
-		constructor(template : any, onload? : Function){
-			super(template, onload);
+		constructor(template : any){
+			super(template);
 			this.components = new tsc.util.LinkedList<Component>();
 
 			this.dom = document.createElement("div");
