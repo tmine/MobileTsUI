@@ -1,7 +1,7 @@
-/// <reference path="../tsc/util/Stack.ts"/>
+/// <reference path="../ts/util/Stack.ts"/>
 /// <reference path="Window.ts"/>
 
-module mtscui {
+module mtsui {
     export class WindowManager {
         private static windowStack: tsc.util.Stack<Window> = new tsc.util.Stack<Window>();
 

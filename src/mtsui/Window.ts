@@ -1,8 +1,8 @@
-/// <reference path="../tsc/util/Stack.ts"/>
-/// <reference path="../tsc/ui/View.ts"/>
+/// <reference path="../ts/util/Stack.ts"/>
+/// <reference path="../ts/ui/View.ts"/>
 /// <reference path="Page.ts"/>
 
-module mtscui {
+module mtsui {
     export class Window extends tsc.ui.View {
         private pageStack: tsc.util.Stack<Page>;
 

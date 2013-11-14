@@ -1,9 +1,9 @@
-/// <reference path="../tsc/ui/View.ts"/>
+/// <reference path="../ts/ui/View.ts"/>
 /// <reference path="Header.ts"/>
 /// <reference path="Component.ts"/>
 /// <reference path="Window.ts"/>
 
-module mtscui {
+module mtsui {
     export class Page extends Component {
         private title: String;
         private window: Window;

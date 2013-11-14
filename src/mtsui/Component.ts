@@ -1,8 +1,8 @@
-/// <reference path="../tsc/util/List.ts"/>
-/// <reference path="../tsc/util/LinkedList.ts"/>
-/// <reference path="../tsc/ui/View.ts"/>
+/// <reference path="../ts/util/List.ts"/>
+/// <reference path="../ts/util/LinkedList.ts"/>
+/// <reference path="../ts/ui/View.ts"/>
 
-module mtscui {
+module mtsui {
     export class Component extends tsc.ui.View {
         private components: tsc.util.List<Component>;
         private dom: HTMLElement;

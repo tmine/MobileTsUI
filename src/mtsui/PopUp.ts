@@ -3,7 +3,7 @@
 /// <reference path="Component.ts"/>
 /// <reference path="Page.ts"/>
 
-module mtscui {
+module mtsui {
 
     export class Popup extends Window {
         constructor(closable: boolean, title?: String, component?: Component) {

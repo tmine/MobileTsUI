@@ -4,7 +4,7 @@
 /// <reference path="Page.ts"/>
 /// <reference path="Popup.ts"/>
 
-module mtscui {
+module mtsui {
 
     export class AlertBox extends Popup {
         constructor(title?: String, text?: String, callback?: Function) {

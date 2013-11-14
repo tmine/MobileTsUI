@@ -3,7 +3,7 @@
 /// <reference path="Header.ts"/>
 /// <reference path="Window.ts"/>
 
-module mtscui {
+module mtsui {
     export class Menu {
         private visible: boolean;
         private menu: HTMLElement;

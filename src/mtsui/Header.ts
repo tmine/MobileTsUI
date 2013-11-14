@@ -1,7 +1,7 @@
-/// <reference path="../tsc/ui/View.ts"/>
+/// <reference path="../ts/ui/View.ts"/>
 /// <reference path="Component.ts"/>
 
-module mtscui {
+module mtsui {
     export class Header extends tsc.ui.View {
         private right: Component;
         private middle: Component;

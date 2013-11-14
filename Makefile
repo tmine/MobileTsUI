@@ -2,6 +2,6 @@
 all: compileTS
 
 compileTS:
-	tsc src/mobileTscUI.ts -out js/mtscui.js
+	tsc src/mobileTsUI.ts -out js/mtsui.js
 
 .PHONY: compileTS
