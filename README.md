@@ -1,4 +1,4 @@
-MobileTscUI
+MobileTsUI
 ===========
 
 Typescript Mobile UI Lib
