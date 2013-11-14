@@ -10,11 +10,10 @@ module mtscui {
         private page: Page;
         private position: String;
 
-        constructor(page: Page, icon: Component, content: Component, position: String) {
+        constructor(page: Page, header: Header, icon: Component, content: Component, position: String) {
             this.page = page;
             this.position = position;
 
-            var header: Header = this.page.getHeader();
             if (position === "left") header.setLeft(icon);
             else if (position === "right") header.setRight(icon);
 
@@ -45,7 +44,7 @@ module mtscui {
                 _this.page.getDom().onclick = function() {
                     _this.toggle();
                 }
-				}, 0);
+			}, 0);
 
             this.visible = true;
         }

@@ -15,7 +15,7 @@ function createSimpleTextComponent(text: String) {
     return new mtscui.Component(node);
 }
 
-function createMenu(mypage, title, position) {
+function createMenu(mypage, header, title, position) {    
     var page = document.createElement("h1");
     page.innerHTML = "Blubber";
     var mymenupage = new mtscui.Component(page);
@@ -25,15 +25,18 @@ function createMenu(mypage, title, position) {
     icon.setAttribute("style", "font-size: 34px; padding-top: 4px;");
     var mymenuicon = new mtscui.Component(icon);
 
-    new mtscui.Menu(mypage, mymenuicon, mymenupage, position);
+    new mtscui.Menu(mypage, header, mymenuicon, mymenupage, position);
 }
 
 function createWindow(title, content, modal) {
     var mywindow = new mtscui.Window(title);
     var mypage: mtscui.Page = mywindow.getActualPage();
 
-    createMenu(mypage, "LEFT", "left");
-    createMenu(mypage, "RIGHT", "right");
+    var header : mtscui.Header = new mtscui.Header();
+    mypage.addHeader(header);
+    
+    createMenu(mypage, header, "LEFT", "left");
+    createMenu(mypage, header, "RIGHT", "right");
 
     mypage.add(createSimpleTextComponent(content));
 
@@ -72,12 +75,12 @@ function createWindow(title, content, modal) {
     linkalert.innerHTML = "open AlertBox";
     linkalert.onclick = function() {
         new mtscui.AlertBox("Achtung", "Achtung text", function() {
-            console.log("alert ok");
+            mtscui.WindowManager.close();
         });
     };
     mypage.add(new mtscui.Component(linkalert));
 
-    if (modal) mtscui.WindowManager.openModal(mywindow);
+    if (modal) mtscui.WindowManager.openModal(mywindow, true);
     else mtscui.WindowManager.openFullscreen(mywindow);
 }
 

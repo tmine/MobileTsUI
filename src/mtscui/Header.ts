@@ -72,5 +72,18 @@ module mtscui {
             dom.setAttribute("class", "mtscui right");
             this.getDom().appendChild(dom);
         }
+        
+        public getLeft(): Component {
+            return this.left;
+        }
+
+        public getMiddle(): Component {
+            return this.middle;
+        }
+
+        public getRight(): Component {
+            return this.right;
+        }
+        
     }
 }

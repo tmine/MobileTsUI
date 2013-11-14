@@ -6,7 +6,7 @@
 module mtscui {
 
     export class Popup extends Window {
-        constructor(title?: String, component?: Component) {
+        constructor(closable: boolean, title?: String, component?: Component) {
             super(title);
 
             var page: Page = this.getActualPage();
@@ -14,7 +14,7 @@ module mtscui {
 
             this.getDom().className += " popup";
 
-            WindowManager.openModal(this);
+            WindowManager.openModal(this, closable);
         }
     }
 }

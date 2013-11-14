@@ -25,14 +25,16 @@ module mtscui {
             WindowManager.open(window);
         }
 
-        public static openModal(window: Window) {
+        public static openModal(window: Window, closable: boolean) {
             var temp: Window = new Window();
 
             temp.getDom().className += " modal";
             temp.getDom().appendChild(window.getDom());
 
-            temp.getDom().onclick = function() {
-                WindowManager.close();
+            if(closable){
+                temp.getDom().onclick = function() {
+                    WindowManager.close();
+                }
             }
 
 			window.getDom().onclick = function() {

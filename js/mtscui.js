@@ -336,6 +336,18 @@ var mtscui;
             dom.setAttribute("class", "mtscui right");
             this.getDom().appendChild(dom);
         };
+
+        Header.prototype.getLeft = function () {
+            return this.left;
+        };
+
+        Header.prototype.getMiddle = function () {
+            return this.middle;
+        };
+
+        Header.prototype.getRight = function () {
+            return this.right;
+        };
         return Header;
     })(tsc.ui.View);
     mtscui.Header = Header;
@@ -350,12 +362,9 @@ var mtscui;
         __extends(Page, _super);
         function Page(window, title) {
             this.window = window;
-            this.header = new mtscui.Header();
 
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtscui page");
-
-            this.div.appendChild(this.header.getDom());
 
             var body = document.createElement("div");
             body.setAttribute("class", "mtscui content");
@@ -365,16 +374,31 @@ var mtscui;
             this.div.appendChild(_super.prototype.getDom.call(this));
 
             this.title = title;
+            if (this.title) {
+                this.header = new mtscui.Header();
+                this.div.appendChild(this.header.getDom());
 
-            var node = document.createElement("h1");
-            var title = this.title || "";
-            var titleNode = document.createTextNode(title.toString());
-            node.appendChild(titleNode);
+                var node = document.createElement("h1");
+                var title = this.title || "";
+                var titleNode = document.createTextNode(title.toString());
+                node.appendChild(titleNode);
 
-            this.header.setMiddle(new mtscui.Component(node));
+                this.header.setMiddle(new mtscui.Component(node));
+            }
         }
-        Page.prototype.getHeader = function () {
-            return this.header;
+        Page.prototype.addHeader = function (header) {
+            if (this.header)
+                this.div.removeChild(this.header.getDom());
+
+            if (this.header.getLeft().getDom().innerHTML != "<span></span>" && header.getLeft().getDom().innerHTML == "<span></span>")
+                header.setLeft(this.header.getLeft());
+            if (this.header.getMiddle().getDom().innerHTML != "<span></span>" && header.getMiddle().getDom().innerHTML == "<span></span>")
+                header.setMiddle(this.header.getMiddle());
+            if (this.header.getRight().getDom().innerHTML != "<span></span>" && header.getRight().getDom().innerHTML == "<span></span>")
+                header.setRight(this.header.getRight());
+
+            this.div.appendChild(header.getDom());
+            this.header = header;
         };
 
         Page.prototype.getWindow = function () {
@@ -417,22 +441,25 @@ var mtscui;
             return new mtscui.Page(this, title);
         };
 
-        Window.prototype.navigateTo = function (page/* TODO: Transition */ ) {
+        Window.prototype.navigateTo = function (page, transitiontype) {
+            if (!transitiontype)
+                transitiontype = "slide";
+
             var oldPage = this.pageStack.pop();
             this.pageStack.push(oldPage);
 
             this.getDom().appendChild(page.getDom());
-            page.getDom().className += " transition slide hide right";
+            page.getDom().className += " transition " + transitiontype + " hide right";
 
             setTimeout(function () {
-                page.getDom().className = page.getDom().className.replace(" transition slide hide right", " transition slide hide in");
+                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide right", " transition " + transitiontype + " hide in");
             }, 0);
 
             setTimeout(function () {
-                page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
+                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide in", "");
             }, 1000);
 
-            oldPage.getDom().className += " transition slide hide left";
+            oldPage.getDom().className += " transition " + transitiontype + " hide left";
 
             this.pageStack.push(page);
         };
@@ -486,15 +513,17 @@ var mtscui;
             WindowManager.open(window);
         };
 
-        WindowManager.openModal = function (window) {
+        WindowManager.openModal = function (window, closable) {
             var temp = new mtscui.Window();
 
             temp.getDom().className += " modal";
             temp.getDom().appendChild(window.getDom());
 
-            temp.getDom().onclick = function () {
-                WindowManager.close();
-            };
+            if (closable) {
+                temp.getDom().onclick = function () {
+                    WindowManager.close();
+                };
+            }
 
             window.getDom().onclick = function () {
                 if (event.stopPropagation)
@@ -528,11 +557,10 @@ var mtscui;
 var mtscui;
 (function (mtscui) {
     var Menu = (function () {
-        function Menu(page, icon, content, position) {
+        function Menu(page, header, icon, content, position) {
             this.page = page;
             this.position = position;
 
-            var header = this.page.getHeader();
             if (position === "left")
                 header.setLeft(icon);
 else if (position === "right")
@@ -596,7 +624,7 @@ var mtscui;
 (function (mtscui) {
     var Popup = (function (_super) {
         __extends(Popup, _super);
-        function Popup(title, component) {
+        function Popup(closable, title, component) {
             _super.call(this, title);
 
             var page = this.getActualPage();
@@ -605,7 +633,7 @@ var mtscui;
 
             this.getDom().className += " popup";
 
-            mtscui.WindowManager.openModal(this);
+            mtscui.WindowManager.openModal(this, closable);
         }
         return Popup;
     })(mtscui.Window);
@@ -629,7 +657,16 @@ var mtscui;
 
             component.add(new mtscui.Component(textelem));
 
-            _super.call(this, title, component);
+            var buttonelem = document.createElement("input");
+            buttonelem.setAttribute("type", "button");
+            buttonelem.setAttribute("value", "ok");
+            buttonelem.onclick = function () {
+                if (callback)
+                    callback();
+            };
+            component.add(new mtscui.Component(buttonelem));
+
+            _super.call(this, false, title, component);
         }
         return AlertBox;
     })(mtscui.Popup);
@@ -649,7 +686,7 @@ function createSimpleTextComponent(text) {
     return new mtscui.Component(node);
 }
 
-function createMenu(mypage, title, position) {
+function createMenu(mypage, header, title, position) {
     var page = document.createElement("h1");
     page.innerHTML = "Blubber";
     var mymenupage = new mtscui.Component(page);
@@ -659,15 +696,18 @@ function createMenu(mypage, title, position) {
     icon.setAttribute("style", "font-size: 34px; padding-top: 4px;");
     var mymenuicon = new mtscui.Component(icon);
 
-    new mtscui.Menu(mypage, mymenuicon, mymenupage, position);
+    new mtscui.Menu(mypage, header, mymenuicon, mymenupage, position);
 }
 
 function createWindow(title, content, modal) {
     var mywindow = new mtscui.Window(title);
     var mypage = mywindow.getActualPage();
 
-    createMenu(mypage, "LEFT", "left");
-    createMenu(mypage, "RIGHT", "right");
+    var header = new mtscui.Header();
+    mypage.addHeader(header);
+
+    createMenu(mypage, header, "LEFT", "left");
+    createMenu(mypage, header, "RIGHT", "right");
 
     mypage.add(createSimpleTextComponent(content));
 
@@ -705,13 +745,13 @@ function createWindow(title, content, modal) {
     linkalert.innerHTML = "open AlertBox";
     linkalert.onclick = function () {
         new mtscui.AlertBox("Achtung", "Achtung text", function () {
-            console.log("alert ok");
+            mtscui.WindowManager.close();
         });
     };
     mypage.add(new mtscui.Component(linkalert));
 
     if (modal)
-        mtscui.WindowManager.openModal(mywindow);
+        mtscui.WindowManager.openModal(mywindow, true);
 else
         mtscui.WindowManager.openFullscreen(mywindow);
 }

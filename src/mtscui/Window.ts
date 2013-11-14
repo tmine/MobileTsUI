@@ -29,22 +29,24 @@ module mtscui {
             return new Page(this, title);
         }
 
-        public navigateTo(page: Page /* TODO: Transition */): void {
+        public navigateTo(page: Page, transitiontype?: String): void {
+            if(!transitiontype) transitiontype = "slide";
+            
             var oldPage: Page = this.pageStack.pop();
             this.pageStack.push(oldPage);
 
             this.getDom().appendChild(page.getDom());
-            page.getDom().className += " transition slide hide right";
+            page.getDom().className += " transition " + transitiontype + " hide right";
 
             setTimeout(function() {
-                page.getDom().className = page.getDom().className.replace(" transition slide hide right", " transition slide hide in");
+                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide right", " transition " + transitiontype + " hide in");
             }, 0);
 
             setTimeout(function() {
-                page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
+                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide in", "");
             }, 1000);
 
-            oldPage.getDom().className += " transition slide hide left";
+            oldPage.getDom().className += " transition " + transitiontype + " hide left";
 
             this.pageStack.push(page);
         }

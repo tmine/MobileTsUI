@@ -231,6 +231,6 @@ body.debug {
 }
 
 /* Page Content */
-.mtscui.window .mtscui.page .mtscui.content {
+.mtscui.window .mtscui.page .mtscui.component {
 	margin: 5px;
 }

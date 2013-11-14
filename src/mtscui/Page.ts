@@ -13,34 +13,44 @@ module mtscui {
 
         constructor(window: Window, title?: String) {
             this.window = window;
-            this.header = new Header();
 
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtscui page");
-
-            this.div.appendChild(this.header.getDom());
-
+            
             var body: HTMLElement = document.createElement("div");
             body.setAttribute("class", "mtscui content");
 
             super(body);
 
             this.div.appendChild(super.getDom());
-
+            
+            
             this.title = title;
-
-            var node = document.createElement("h1");
-            var title: String = this.title || "";
-            var titleNode = document.createTextNode(title.toString());
-            node.appendChild(titleNode);
-
-            this.header.setMiddle(new Component(node));
+            if(this.title){
+                this.header = new Header();
+                this.div.appendChild(this.header.getDom());
+                
+                var node = document.createElement("h1");
+                var title: String = this.title || "";
+                var titleNode = document.createTextNode(title.toString());
+                node.appendChild(titleNode);
+    
+                this.header.setMiddle(new Component(node));
+            }
         }
 
-        public getHeader(): Header {
-            return this.header;
+        public addHeader(header: Header): void{
+            if(this.header) this.div.removeChild(this.header.getDom());
+            
+            // check if our header has already some elements, if true copy them to new header if it havn't got its own
+            if(this.header.getLeft().getDom().innerHTML != "<span></span>" && header.getLeft().getDom().innerHTML == "<span></span>") header.setLeft(this.header.getLeft()); 
+            if(this.header.getMiddle().getDom().innerHTML != "<span></span>" && header.getMiddle().getDom().innerHTML == "<span></span>") header.setMiddle(this.header.getMiddle());
+            if(this.header.getRight().getDom().innerHTML != "<span></span>" && header.getRight().getDom().innerHTML == "<span></span>") header.setRight(this.header.getRight()); 
+            
+            this.div.appendChild(header.getDom());
+            this.header = header;
         }
-
+        
         public getWindow(): Window {
             return this.window;
         }
@@ -48,5 +58,6 @@ module mtscui {
         public getDom(): HTMLElement {
             return this.div;
         }
+
     }
 }
