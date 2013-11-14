@@ -802,6 +802,7 @@ var mtsui;
 
     var ListItemDecorator = (function (_super) {
         __extends(ListItemDecorator, _super);
+        // TODO : exchange comp and value
         function ListItemDecorator(comp, value, position) {
             _super.call(this, value);
 

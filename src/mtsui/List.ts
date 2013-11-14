@@ -38,8 +38,9 @@ module mtsui {
         }
     }
     
-    export class ListItemDecorator extends ListItem {        
-        constructor(comp: Component, value?: String, position?: String){
+    export class ListItemDecorator extends ListItem { 
+        // TODO : exchange comp and value       
+        constructor(comp: Component, value?: any, position?: String){
             super(value);
             
             var compdom = comp.getDom();
