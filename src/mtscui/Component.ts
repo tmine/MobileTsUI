@@ -1,6 +1,6 @@
-/// <reference path="../../tsc/util/List.ts"/>
-/// <reference path="../../tsc/util/LinkedList.ts"/>
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/util/List.ts"/>
+/// <reference path="../tsc/util/LinkedList.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 
 module mtscui {
 	export class Component extends tsc.ui.View{

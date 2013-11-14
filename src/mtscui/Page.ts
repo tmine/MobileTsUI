@@ -1,4 +1,4 @@
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 /// <reference path="Header.ts"/>
 /// <reference path="Component.ts"/>
 /// <reference path="Window.ts"/>
@@ -11,7 +11,8 @@ module mtscui {
 		private body : Component;
 		private div : HTMLElement;
 
-		constructor(title? : String){
+		constructor(window : Window, title? : String){
+			this.window = window;
 			this.header = new Header();
 
 			this.div = document.createElement("div");
@@ -36,9 +37,6 @@ module mtscui {
 			this.header.setMiddle(new Component(node));
 		}
 
-		public setWindow(window : Window){
-			this.window = window;
-		}
 		public getHeader() : Header {
 			return this.header;
 		}

@@ -13,8 +13,18 @@ var tsc;
                 return this.array.pop();
             };
 
+            Stack.prototype.peek = function () {
+                var item = this.array.pop();
+                this.array.push(item);
+                return item;
+            };
+
             Stack.prototype.size = function () {
                 return this.array.length;
+            };
+
+            Stack.prototype.empty = function () {
+                return this.array.length == 0;
             };
             return Stack;
         })();
@@ -221,9 +231,9 @@ else
     })(tsc.util || (tsc.util = {}));
     var util = tsc.util;
 })(tsc || (tsc = {}));
-/// <reference path="../../tsc/util/List.ts"/>
-/// <reference path="../../tsc/util/LinkedList.ts"/>
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/util/List.ts"/>
+/// <reference path="../tsc/util/LinkedList.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -257,7 +267,7 @@ var mtscui;
     })(tsc.ui.View);
     mtscui.Component = Component;
 })(mtscui || (mtscui = {}));
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 /// <reference path="Component.ts"/>
 var mtscui;
 (function (mtscui) {
@@ -298,39 +308,39 @@ var mtscui;
             _super.call(this, instance);
         }
         Header.prototype.setLeft = function (comp) {
-            _super.prototype.getDom.call(this).removeChild(this.left.getDom());
+            this.getDom().removeChild(this.left.getDom());
 
             this.left = comp;
 
             var dom = this.left.getDom();
             dom.setAttribute("class", "mtscui left");
-            _super.prototype.getDom.call(this).insertBefore(dom, this.middle.getDom());
+            this.getDom().insertBefore(dom, this.middle.getDom());
         };
 
         Header.prototype.setMiddle = function (comp) {
-            _super.prototype.getDom.call(this).removeChild(this.middle.getDom());
+            this.getDom().removeChild(this.middle.getDom());
 
             this.middle = comp;
 
             var dom = this.middle.getDom();
             dom.setAttribute("class", "mtscui middle");
-            _super.prototype.getDom.call(this).insertBefore(dom, this.right.getDom());
+            this.getDom().insertBefore(dom, this.right.getDom());
         };
 
         Header.prototype.setRight = function (comp) {
-            _super.prototype.getDom.call(this).removeChild(this.right.getDom());
+            this.getDom().removeChild(this.right.getDom());
 
             this.right = comp;
 
             var dom = this.right.getDom();
             dom.setAttribute("class", "mtscui right");
-            _super.prototype.getDom.call(this).appendChild(dom);
+            this.getDom().appendChild(dom);
         };
         return Header;
     })(tsc.ui.View);
     mtscui.Header = Header;
 })(mtscui || (mtscui = {}));
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 /// <reference path="Header.ts"/>
 /// <reference path="Component.ts"/>
 /// <reference path="Window.ts"/>
@@ -338,7 +348,8 @@ var mtscui;
 (function (mtscui) {
     var Page = (function (_super) {
         __extends(Page, _super);
-        function Page(title) {
+        function Page(window, title) {
+            this.window = window;
             this.header = new mtscui.Header();
 
             this.div = document.createElement("div");
@@ -362,9 +373,6 @@ var mtscui;
 
             this.header.setMiddle(new mtscui.Component(node));
         }
-        Page.prototype.setWindow = function (window) {
-            this.window = window;
-        };
         Page.prototype.getHeader = function () {
             return this.header;
         };
@@ -380,33 +388,40 @@ var mtscui;
     })(mtscui.Component);
     mtscui.Page = Page;
 })(mtscui || (mtscui = {}));
-/// <reference path="../../tsc/util/Stack.ts"/>
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/util/Stack.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 /// <reference path="Page.ts"/>
 var mtscui;
 (function (mtscui) {
     var Window = (function (_super) {
         __extends(Window, _super);
-        function Window(page) {
+        function Window(title) {
             this.pageStack = new tsc.util.Stack();
 
             var instance = document.createElement("div");
             instance.setAttribute("class", "mtscui window");
-
-            if (page) {
-                page.setWindow(this);
-                instance.appendChild(page.getDom());
-                this.pageStack.push(page);
-            }
-
             _super.call(this, instance);
+
+            var page = this.createPage(title);
+            instance.appendChild(page.getDom());
+            this.pageStack.push(page);
         }
+        Window.prototype.getActualPage = function () {
+            var page = this.pageStack.pop();
+            this.pageStack.push(page);
+
+            return page;
+        };
+
+        Window.prototype.createPage = function (title) {
+            return new mtscui.Page(this, title);
+        };
+
         Window.prototype.navigateTo = function (page/* TODO: Transition */ ) {
             var oldPage = this.pageStack.pop();
             this.pageStack.push(oldPage);
 
-            page.setWindow(this);
-            _super.prototype.getDom.call(this).appendChild(page.getDom());
+            this.getDom().appendChild(page.getDom());
             page.getDom().className += " transition slide hide right";
 
             setTimeout(function () {
@@ -429,7 +444,7 @@ var mtscui;
 
             oldPage.getDom().className += " transition slide hide right";
 
-            var superdom = _super.prototype.getDom.call(this);
+            var superdom = this.getDom();
             setTimeout(function () {
                 page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
             }, 0);
@@ -443,7 +458,7 @@ var mtscui;
     })(tsc.ui.View);
     mtscui.Window = Window;
 })(mtscui || (mtscui = {}));
-/// <reference path="../../tsc/util/Stack.ts"/>
+/// <reference path="../tsc/util/Stack.ts"/>
 /// <reference path="Window.ts"/>
 var mtscui;
 (function (mtscui) {
@@ -473,6 +488,11 @@ var mtscui;
 
         WindowManager.openModal = function (window) {
             var temp = new mtscui.Window();
+
+            // TODO : find a solution!
+            // HACK : remove default page from window
+            temp.back();
+
             temp.getDom().className += " modal";
             temp.getDom().appendChild(window.getDom());
 
@@ -481,7 +501,6 @@ var mtscui;
             };
 
             window.getDom().onclick = function () {
-                console.log("blubber");
                 if (event.stopPropagation)
                     event.stopPropagation();
                 if (event)
@@ -582,10 +601,11 @@ var mtscui;
     var Popup = (function (_super) {
         __extends(Popup, _super);
         function Popup(title, component) {
-            var page = new mtscui.Page(title);
+            _super.call(this, title);
+
+            var page = this.getActualPage();
             if (component)
                 page.add(component);
-            _super.call(this, page);
 
             this.getDom().className += " popup";
 
@@ -594,7 +614,14 @@ var mtscui;
         return Popup;
     })(mtscui.Window);
     mtscui.Popup = Popup;
-
+})(mtscui || (mtscui = {}));
+/// <reference path="Window.ts"/>
+/// <reference path="WindowManager.ts"/>
+/// <reference path="Component.ts"/>
+/// <reference path="Page.ts"/>
+/// <reference path="Popup.ts"/>
+var mtscui;
+(function (mtscui) {
     var AlertBox = (function (_super) {
         __extends(AlertBox, _super);
         function AlertBox(title, text, callback) {
@@ -609,7 +636,7 @@ var mtscui;
             _super.call(this, title, component);
         }
         return AlertBox;
-    })(Popup);
+    })(mtscui.Popup);
     mtscui.AlertBox = AlertBox;
 })(mtscui || (mtscui = {}));
 /// <reference path="mtscui/Window.ts"/>
@@ -640,8 +667,8 @@ function createMenu(mypage, title, position) {
 }
 
 function createWindow(title, content, modal) {
-    var mypage = new mtscui.Page(title);
-    var mywindow = new mtscui.Window(mypage);
+    var mywindow = new mtscui.Window(title);
+    var mypage = mywindow.getActualPage();
 
     createMenu(mypage, "LEFT", "left");
     createMenu(mypage, "RIGHT", "right");
@@ -653,7 +680,7 @@ function createWindow(title, content, modal) {
     link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
     link.innerHTML = "goto";
     link.onclick = function () {
-        var newpage = new mtscui.Page("New Page");
+        var newpage = mypage.getWindow().createPage("New Page");
         mypage.getWindow().navigateTo(newpage);
 
         var link = document.createElement("div");

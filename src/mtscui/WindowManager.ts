@@ -1,4 +1,4 @@
-/// <reference path="../../tsc/util/Stack.ts"/>
+/// <reference path="../tsc/util/Stack.ts"/>
 /// <reference path="Window.ts"/>
 
 module mtscui {
@@ -27,6 +27,11 @@ module mtscui {
 
 		public static openModal(window : Window){
 			var temp : Window = new Window();
+
+			// TODO : find a solution!
+			// HACK : remove default page from window
+			temp.back();
+
 			temp.getDom().className += " modal";
 			temp.getDom().appendChild(window.getDom());
 
@@ -35,7 +40,6 @@ module mtscui {
 			}
 
 			window.getDom().onclick = function(){
-				console.log("blubber");
 				if(event.stopPropagation) event.stopPropagation()
 				if(event) event.cancelBubble = true;
 			}

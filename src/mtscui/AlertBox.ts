@@ -2,19 +2,9 @@
 /// <reference path="WindowManager.ts"/>
 /// <reference path="Component.ts"/>
 /// <reference path="Page.ts"/>
+/// <reference path="Popup.ts"/>
 
 module mtscui {
-	export class Popup extends Window {
-		constructor(title? : String, component? : Component){
-			var page = new Page(title);
-			if(component) page.add(component);
-			super(page);
-
-			this.getDom().className += " popup";
-
-			WindowManager.openModal(this);
-		}
-	}
 
 	export class AlertBox extends Popup {
 		constructor(title? : String, text? : String, callback? : Function){
@@ -28,8 +18,6 @@ module mtscui {
 
 			super(title, component);
 		}
-
 	}
 
-	
 }

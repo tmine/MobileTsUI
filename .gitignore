@@ -1,1 +1,6 @@
 libs
+.settings
+.project
+.externalToolBuilders/Makefile.launch
+
+eclipseBuilder.sh

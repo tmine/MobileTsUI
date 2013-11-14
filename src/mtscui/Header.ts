@@ -1,4 +1,4 @@
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 /// <reference path="Component.ts"/>
 
 module mtscui {
@@ -44,33 +44,33 @@ module mtscui {
 		}
 
 		public setLeft(comp : Component) : void {
-			super.getDom().removeChild(this.left.getDom());
+			this.getDom().removeChild(this.left.getDom());
 
 			this.left = comp;
 
 			var dom = this.left.getDom();
 			dom.setAttribute("class", "mtscui left");
-			super.getDom().insertBefore(dom, this.middle.getDom()); 
+			this.getDom().insertBefore(dom, this.middle.getDom()); 
 		}
 
 		public setMiddle(comp : Component) : void {
-			super.getDom().removeChild(this.middle.getDom());
+			this.getDom().removeChild(this.middle.getDom());
 
 			this.middle = comp;
 
 			var dom = this.middle.getDom();
 			dom.setAttribute("class", "mtscui middle");
-			super.getDom().insertBefore(dom, this.right.getDom()); 
+			this.getDom().insertBefore(dom, this.right.getDom()); 
 		}
 
 		public setRight(comp : Component) : void {
-			super.getDom().removeChild(this.right.getDom());
+			this.getDom().removeChild(this.right.getDom());
 
 			this.right = comp;
 
 			var dom = this.right.getDom();
 			dom.setAttribute("class", "mtscui right");
-			super.getDom().appendChild(dom);
+			this.getDom().appendChild(dom);
 		}
 	}
 }

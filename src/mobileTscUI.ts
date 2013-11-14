@@ -29,9 +29,9 @@ function createMenu(mypage, title, position){
 }
 
 function createWindow(title, content, modal){
-	var mypage = new mtscui.Page(title);
-	var mywindow = new mtscui.Window(mypage);
-	
+	var mywindow = new mtscui.Window(title);
+	var mypage : mtscui.Page = mywindow.getActualPage();
+
 	createMenu(mypage, "LEFT", "left");
 	createMenu(mypage, "RIGHT", "right");
 	
@@ -42,7 +42,7 @@ function createWindow(title, content, modal){
 	link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
 	link.innerHTML = "goto";
 	link.onclick = function(){
-		var newpage = new mtscui.Page("New Page");
+		var newpage : mtscui.Page = mypage.getWindow().createPage("New Page");
 		mypage.getWindow().navigateTo(newpage);
 
 		var link = document.createElement("div");

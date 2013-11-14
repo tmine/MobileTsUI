@@ -1,32 +1,39 @@
-/// <reference path="../../tsc/util/Stack.ts"/>
-/// <reference path="../../tsc/ui/View.ts"/>
+/// <reference path="../tsc/util/Stack.ts"/>
+/// <reference path="../tsc/ui/View.ts"/>
 /// <reference path="Page.ts"/>
 
 module mtscui {
 	export class Window extends tsc.ui.View {
 		private pageStack : tsc.util.Stack<Page>;
 
-		constructor(page? : Page){
+		constructor(title? : String){
 			this.pageStack = new tsc.util.Stack<Page>();
 
 			var instance : HTMLElement = document.createElement("div");
 			instance.setAttribute("class", "mtscui window");
-
-			if(page) {
-				page.setWindow(this);
-				instance.appendChild(page.getDom());
-				this.pageStack.push(page);
-			}
-
 			super(instance);
+
+			var page : Page = this.createPage(title);
+			instance.appendChild(page.getDom());
+			this.pageStack.push(page);
+		}
+
+		public getActualPage() : Page {
+			var page : Page = this.pageStack.pop();
+			this.pageStack.push(page);
+
+			return page;
+		}
+
+		public createPage(title? : String) : Page{
+			return new Page(this, title);
 		}
 
 		public navigateTo(page: Page /* TODO: Transition */) : void {
 			var oldPage : Page = this.pageStack.pop();
 			this.pageStack.push(oldPage);
 
-			page.setWindow(this);
-			super.getDom().appendChild(page.getDom());
+			this.getDom().appendChild(page.getDom());
 			page.getDom().className += " transition slide hide right";
 
 			setTimeout(function(){
@@ -49,7 +56,7 @@ module mtscui {
 
 			oldPage.getDom().className += " transition slide hide right";
 
-			var superdom = super.getDom();
+			var superdom = this.getDom();
 			setTimeout(function(){
 				page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
 			}, 0);
