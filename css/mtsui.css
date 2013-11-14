@@ -125,7 +125,6 @@ body.debug {
 	z-index: 1;
 }
 
-
 /* Page */
 .mtsui.window .mtsui.page {
 	padding-top: 40px;
@@ -231,6 +230,39 @@ body.debug {
 }
 
 /* Page Content */
-.mtsui.window .mtsui.page .mtsui.component {
+.mtsui.window .mtsui.page .mtsui.content {
 	margin: 5px;
+}
+
+/* Button */
+.mtsui.button {
+	padding: 5px;
+	border: solid 1px black;
+	background-color: rgba(255, 255, 255,1);
+	border-radius: 10px;
+}
+
+.mtsui.button .mtsui.icon.left {
+	padding-right: 5px;
+}
+.mtsui.button .mtsui.icon.right {
+	padding-left: 5px;
+}
+
+/* List */
+.mtsui.list {
+	margin-top: 20px;
+}
+
+.mtsui.list .mtsui.listitem {
+	border-bottom: solid 1px black;
+	padding: 5px;
+	width: 100%;
+}
+
+.mtsui.list .mtsui.listitem .mtsui.listtext {
+}
+
+.mtsui.list .mtsui.listitem .mtsui.listicon {
+	text-align: right;
 }

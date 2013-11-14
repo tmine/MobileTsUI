@@ -4,6 +4,8 @@
 /// <reference path="mtsui/Page.ts"/>
 /// <reference path="mtsui/Menu.ts"/>
 /// <reference path="mtsui/AlertBox.ts"/>
+/// <reference path="mtsui/Button.ts"/>
+/// <reference path="mtsui/List.ts"/>
 
 
 function createSimpleTextComponent(text: String) {
@@ -47,15 +49,30 @@ function createWindow(title, content, modal) {
     link.onclick = function() {
         var newpage: mtsui.Page = mypage.getWindow().createPage("New Page");
         mypage.getWindow().navigateTo(newpage);
-
-        var link = document.createElement("div");
-        link.setAttribute("class", "fa fa-arrow-left");
-        link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
-        link.innerHTML = "back";
-        link.onclick = function() {
+        
+        var bt_back : mtsui.Button = new mtsui.Button("back", function() {
             newpage.getWindow().back();
-        };
-        newpage.add(new mtsui.Component(link));
+        });
+        bt_back.addIcon("fa fa-arrow-left", "left");
+        bt_back.addIcon("fa fa-arrow-left", "top");
+        bt_back.addIcon("fa fa-arrow-left", "bottom");
+        bt_back.addIcon("fa fa-arrow-left", "right");
+        
+        newpage.add(bt_back);
+        
+        var list: mtsui.List = new mtsui.List();
+        list.add(new mtsui.ListItem("Blubber"));
+        list.add(new mtsui.ListItem("Blubber"));
+        list.add(new mtsui.ListItem("Blubber"));
+        list.add(new mtsui.ListItem("Blubber"));
+        var iconListItem: mtsui.IconListItem = new mtsui.IconListItem("fa fa-chevron-right", "Blubber");
+        iconListItem.setOnclick(function(){
+            alert("clicked");
+        });
+        list.add(iconListItem);
+        
+        newpage.add(list);
+        
     };
     mypage.add(new mtsui.Component(link));
 

@@ -672,11 +672,143 @@ var mtsui;
     })(mtsui.Popup);
     mtsui.AlertBox = AlertBox;
 })(mtsui || (mtsui = {}));
+/// <reference path="Component.ts"/>
+var mtsui;
+(function (mtsui) {
+    var Button = (function (_super) {
+        __extends(Button, _super);
+        function Button(value, click_cb) {
+            var input = document.createElement("button");
+            input.setAttribute("class", "mtsui button");
+
+            var text = document.createElement("span");
+            text.appendChild(document.createTextNode("" + value));
+
+            input.appendChild(text);
+
+            input.onclick = function () {
+                if (click_cb)
+                    click_cb();
+            };
+
+            _super.call(this, input);
+        }
+        Button.prototype.addIcon = function (icon_class, pos) {
+            var icon = document.createElement("span");
+            icon.setAttribute("class", "mtsui icon " + icon_class + " " + pos);
+
+            if (this.icon)
+                this.getDom().firstChild.removeChild(this.icon);
+
+            var input = this.getDom().firstChild;
+            var inputFirstChild = this.getDom().firstChild.firstChild;
+
+            if (!pos || pos === "right") {
+                input.appendChild(icon);
+                inputFirstChild.style.display = "inline";
+            }
+
+            if (pos === "left") {
+                input.insertBefore(icon, inputFirstChild);
+                inputFirstChild.style.display = "inline";
+            }
+
+            if (pos === "top") {
+                inputFirstChild.style.display = "block";
+                input.insertBefore(icon, inputFirstChild);
+            }
+
+            if (pos === "bottom") {
+                inputFirstChild.style.display = "block";
+                input.appendChild(icon);
+            }
+
+            this.icon = icon;
+        };
+        return Button;
+    })(mtsui.Component);
+    mtsui.Button = Button;
+})(mtsui || (mtsui = {}));
+/// <reference path="Component.ts"/>
+var mtsui;
+(function (mtsui) {
+    var ListItem = (function (_super) {
+        __extends(ListItem, _super);
+        function ListItem(value) {
+            this.value = value;
+
+            this.item = document.createElement("table");
+            this.item.setAttribute("class", "mtsui listitem");
+
+            _super.call(this, this.item);
+
+            if (value) {
+                var tr = document.createElement("tr");
+                var text = document.createElement("td");
+                text.setAttribute("class", "mtsui listtext");
+                text.appendChild(document.createTextNode("" + value));
+                tr.appendChild(text);
+                _super.prototype.getDom.call(this).firstChild.appendChild(tr);
+            }
+        }
+        ListItem.prototype.getValue = function () {
+            return this.value;
+        };
+
+        ListItem.prototype.setOnclick = function (func) {
+            this.item.onclick = function () {
+                func();
+            };
+        };
+        return ListItem;
+    })(mtsui.Component);
+    mtsui.ListItem = ListItem;
+
+    var IconListItem = (function (_super) {
+        __extends(IconListItem, _super);
+        function IconListItem(icon_class, value, position) {
+            _super.call(this, value);
+
+            var icon = document.createElement("td");
+            icon.setAttribute("class", "mtsui listicon " + icon_class);
+
+            if (position && position === "right")
+                _super.prototype.getDom.call(this).firstChild.firstChild.appendChild(icon);
+            if (position && position === "left")
+                _super.prototype.getDom.call(this).firstChild.firstChild.insertBefore(icon, _super.prototype.getDom.call(this).firstChild.firstChild);
+else
+                _super.prototype.getDom.call(this).firstChild.firstChild.appendChild(icon);
+        }
+        return IconListItem;
+    })(ListItem);
+    mtsui.IconListItem = IconListItem;
+
+    var List = (function (_super) {
+        __extends(List, _super);
+        function List() {
+            var list = document.createElement("div");
+            list.setAttribute("class", "mtsui list");
+
+            _super.call(this, list);
+        }
+        List.prototype.add = function (listItem) {
+            _super.prototype.add.call(this, listItem);
+        };
+
+        List.prototype.remove = function (listItem) {
+            _super.prototype.remove.call(this, listItem);
+        };
+        return List;
+    })(mtsui.Component);
+    mtsui.List = List;
+})(mtsui || (mtsui = {}));
 /// <reference path="mtsui/Window.ts"/>
 /// <reference path="mtsui/WindowManager.ts"/>
 /// <reference path="mtsui/Page.ts"/>
 /// <reference path="mtsui/Menu.ts"/>
 /// <reference path="mtsui/AlertBox.ts"/>
+/// <reference path="mtsui/Button.ts"/>
+/// <reference path="mtsui/List.ts"/>
 function createSimpleTextComponent(text) {
     var node = document.createElement("h1");
     var title = text || "";
@@ -719,14 +851,28 @@ function createWindow(title, content, modal) {
         var newpage = mypage.getWindow().createPage("New Page");
         mypage.getWindow().navigateTo(newpage);
 
-        var link = document.createElement("div");
-        link.setAttribute("class", "fa fa-arrow-left");
-        link.setAttribute("style", "font-size: 34px; padding-top: 4px;");
-        link.innerHTML = "back";
-        link.onclick = function () {
+        var bt_back = new mtsui.Button("back", function () {
             newpage.getWindow().back();
-        };
-        newpage.add(new mtsui.Component(link));
+        });
+        bt_back.addIcon("fa fa-arrow-left", "left");
+        bt_back.addIcon("fa fa-arrow-left", "top");
+        bt_back.addIcon("fa fa-arrow-left", "bottom");
+        bt_back.addIcon("fa fa-arrow-left", "right");
+
+        newpage.add(bt_back);
+
+        var list = new mtsui.List();
+        list.add(new mtsui.ListItem("Blubber"));
+        list.add(new mtsui.ListItem("Blubber"));
+        list.add(new mtsui.ListItem("Blubber"));
+        list.add(new mtsui.ListItem("Blubber"));
+        var iconListItem = new mtsui.IconListItem("fa fa-chevron-right", "Blubber");
+        iconListItem.setOnclick(function () {
+            alert("clicked");
+        });
+        list.add(iconListItem);
+
+        newpage.add(list);
     };
     mypage.add(new mtsui.Component(link));
 
