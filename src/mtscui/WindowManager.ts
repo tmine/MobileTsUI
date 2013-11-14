@@ -28,10 +28,6 @@ module mtscui {
         public static openModal(window: Window) {
             var temp: Window = new Window();
 
-            // TODO : find a solution!
-            // HACK : remove default page from window
-            temp.back();
-
             temp.getDom().className += " modal";
             temp.getDom().appendChild(window.getDom());
 

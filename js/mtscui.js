@@ -489,10 +489,6 @@ var mtscui;
         WindowManager.openModal = function (window) {
             var temp = new mtscui.Window();
 
-            // TODO : find a solution!
-            // HACK : remove default page from window
-            temp.back();
-
             temp.getDom().className += " modal";
             temp.getDom().appendChild(window.getDom());
 
@@ -722,8 +718,8 @@ else
 
 window.onload = function () {
     createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
-    /*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds");}, 1000);
-    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 2000);
-    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 3000);
-    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds");}, 4000);*/
+    /*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds", false);}, 1000);
+    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 2000);
+    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 3000);
+    setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 4000);*/
 };

@@ -20,46 +20,37 @@ body.debug {
 	position: absolute;
 }
 
-.debug .mtscui.window:nth-child(2) {
+.debug .mtscui.window:nth-of-type(2) {
 	left: 20px;
 	top: -20px;
 	bottom: 20px;
 	right: -20px;
 }
-.debug .mtscui.window:nth-child(3) {
+.debug .mtscui.window:nth-of-type(3) {
 	left: 40px;
 	top: -40px;
 	bottom: 40px;
 	right: -40px;
 }
-.debug .mtscui.window:nth-child(4) {
+.debug .mtscui.window:nth-of-type(4) {
 	left: 60px;
 	top: -60px;
 	bottom: 60px;
 	right: -60px;
 }
-.debug .mtscui.window:nth-child(5) {
+.debug .mtscui.window:nth-of-type(5) {
 	left: 80px;
 	top: -80px;
 	bottom: 80px;
 	right: -80px;
 }
 
-.debug .mtscui.window:nth-child(6) {
+.debug .mtscui.window:nth-of-type(6) {
 	left: 100px;
 	bottom: 100px;
 	right: -100px;
 	top: -100px;
 }
-
-/*
-.mtscui.window:nth-child(1) {
-	background-color: rgba(0, 0, 0, 0.5);
-}
-.mtscui.window:nth-child(2) {
-	background-color: rgba(0, 0, 0, 0.5);
-}
-*/
 
 .debug .mtscui.window.hide {
 	-webkit-filter: blur(2px) !important;
@@ -68,6 +59,15 @@ body.debug {
     -ms-filter: blur(2px) !important;
     filter: blur(2px) !important;
 }
+
+
+/* Component */
+.debug .mtscui.component {
+	border: solid 1px black !important;
+	margin: 5px !important;
+	padding: 5px !important;
+}
+
 /* end Test */
 
 /* Global mtscui */
@@ -87,7 +87,6 @@ body.debug {
 	bottom: 0;
 	right: 0;
 	left: 0;
-	border: solid 1px red;
 	background-color: rgba(255, 255, 255, 0.5);
 	overflow: hidden;
 }
@@ -110,6 +109,9 @@ body.debug {
 	right: 10%;
 	top: 20px;
 	bottom: 20px;
+	
+	border: solid 1px black;
+	border-radius: 5px;
 
 	z-index: 1;
 }
@@ -123,12 +125,6 @@ body.debug {
 	z-index: 1;
 }
 
-/* Component */
-.mtscui.component {
-	border: solid 1px black;
-	margin: 5px;
-	padding: 5px;
-}
 
 /* Page */
 .mtscui.window .mtscui.page {
@@ -204,7 +200,6 @@ body.debug {
 	top: 0;
 	right: 0;
 	left: 0;
-	background-color: rgba(255, 0, 0, 0.6);
 	height: 40px;
 }
 .mtscui.window .mtscui.page .mtscui.header .mtscui.left {	
@@ -236,4 +231,6 @@ body.debug {
 }
 
 /* Page Content */
-.mtscui.window .mtscui.page .mtscui.content {}
+.mtscui.window .mtscui.page .mtscui.content {
+	margin: 5px;
+}
