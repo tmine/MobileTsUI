@@ -772,7 +772,13 @@ var mtsui;
 
             _super.call(this, this.item);
 
-            if (value) {
+            if (value instanceof mtsui.Component) {
+                var tr = document.createElement("tr");
+                var text = document.createElement("td");
+                text.appendChild(value.getDom());
+                tr.appendChild(text);
+                _super.prototype.getDom.call(this).firstChild.appendChild(tr);
+            } else if (value) {
                 var tr = document.createElement("tr");
                 var text = document.createElement("td");
                 text.setAttribute("class", "mtsui listtext");

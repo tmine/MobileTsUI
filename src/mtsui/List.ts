@@ -5,7 +5,7 @@ module mtsui {
         private value: String;
         private item: HTMLElement;
         
-        constructor(value?: String) {
+        constructor(value?: any) {
             this.value = value;
             
             this.item = document.createElement("table");
@@ -13,7 +13,13 @@ module mtsui {
             
             super(this.item);
             
-            if(value) {
+            if(value instanceof Component){
+                var tr: HTMLElement = document.createElement("tr");
+                var text: HTMLElement = document.createElement("td");
+                text.appendChild(value.getDom());
+                tr.appendChild(text);
+                super.getDom().firstChild.appendChild(tr);
+            } else if(value) {
                 var tr: HTMLElement = document.createElement("tr");
                 var text: HTMLElement = document.createElement("td");
                 text.setAttribute("class", "mtsui listtext");
