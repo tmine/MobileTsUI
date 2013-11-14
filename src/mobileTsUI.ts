@@ -6,7 +6,7 @@
 /// <reference path="mtsui/AlertBox.ts"/>
 /// <reference path="mtsui/Button.ts"/>
 /// <reference path="mtsui/List.ts"/>
-
+/// <reference path="mtsui/Icon.ts"/>
 
 function createSimpleTextComponent(text: String) {
     var node = document.createElement("h1");
@@ -53,26 +53,9 @@ function createWindow(title, content, modal) {
         var bt_back : mtsui.Button = new mtsui.Button("back", function() {
             newpage.getWindow().back();
         });
-        bt_back.addIcon("fa fa-arrow-left", "left");
-        bt_back.addIcon("fa fa-arrow-left", "top");
-        bt_back.addIcon("fa fa-arrow-left", "bottom");
-        bt_back.addIcon("fa fa-arrow-left", "right");
+        bt_back.addIcon(new mtsui.Icon("fa fa-arrow-left"), "right");
         
         newpage.add(bt_back);
-        
-        var list: mtsui.List = new mtsui.List();
-        list.add(new mtsui.ListItem("Blubber"));
-        list.add(new mtsui.ListItem("Blubber"));
-        list.add(new mtsui.ListItem("Blubber"));
-        list.add(new mtsui.ListItem("Blubber"));
-        var iconListItem: mtsui.IconListItem = new mtsui.IconListItem("fa fa-chevron-right", "Blubber");
-        iconListItem.setOnclick(function(){
-            alert("clicked");
-        });
-        list.add(iconListItem);
-        
-        newpage.add(list);
-        
     };
     mypage.add(new mtsui.Component(link));
 
@@ -99,6 +82,42 @@ function createWindow(title, content, modal) {
 
     if (modal) mtsui.WindowManager.openModal(mywindow, true);
     else mtsui.WindowManager.openFullscreen(mywindow);
+    
+    
+    var list: mtsui.List = new mtsui.List();
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    
+    var iconListItem: mtsui.IconListItem = new mtsui.IconListItem(new mtsui.Icon("fa fa-chevron-right"), "Blubber", "right");
+    iconListItem.setOnclick(function(){
+        alert("clicked");
+    });
+    list.add(iconListItem);
+    
+    mypage.add(list);
+    
+    
+    
 }
 
 window.onload = function() {

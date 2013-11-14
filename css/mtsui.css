@@ -127,7 +127,6 @@ body.debug {
 
 /* Page */
 .mtsui.window .mtsui.page {
-	padding-top: 40px;
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -200,6 +199,8 @@ body.debug {
 	right: 0;
 	left: 0;
 	height: 40px;
+	
+	background-color: rgba(255, 255, 255, 1);
 }
 .mtsui.window .mtsui.page .mtsui.header .mtsui.left {	
 	padding-left: 2%;
@@ -232,6 +233,15 @@ body.debug {
 /* Page Content */
 .mtsui.window .mtsui.page .mtsui.content {
 	margin: 5px;
+	
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 /* Button */
@@ -263,6 +273,6 @@ body.debug {
 .mtsui.list .mtsui.listitem .mtsui.listtext {
 }
 
-.mtsui.list .mtsui.listitem .mtsui.listicon {
+.mtsui.list .mtsui.listitem .mtsui.right {
 	text-align: right;
 }

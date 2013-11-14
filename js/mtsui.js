@@ -384,6 +384,14 @@ var mtsui;
                 node.appendChild(titleNode);
 
                 this.header.setMiddle(new mtsui.Component(node));
+
+                var content = _super.prototype.getDom.call(this).firstChild;
+                var header = this.header;
+
+                /* wait for relayout to get the calculated scrollHeight */
+                setTimeout(function () {
+                    content.style.top = header.getDom().scrollHeight + "px";
+                }, 0);
             }
         }
         Page.prototype.addHeader = function (header) {
@@ -399,6 +407,13 @@ var mtsui;
 
             this.div.appendChild(header.getDom());
             this.header = header;
+
+            var content = _super.prototype.getDom.call(this).firstChild;
+
+            /* wait for relayout to get the calculated scrollHeight */
+            setTimeout(function () {
+                content.style.top = header.getDom().scrollHeight + "px";
+            }, 0);
         };
 
         Page.prototype.getWindow = function () {
@@ -675,6 +690,21 @@ var mtsui;
 /// <reference path="Component.ts"/>
 var mtsui;
 (function (mtsui) {
+    var Icon = (function (_super) {
+        __extends(Icon, _super);
+        function Icon(type) {
+            var icon = document.createElement("span");
+            icon.setAttribute("class", "" + type);
+            _super.call(this, icon);
+        }
+        return Icon;
+    })(mtsui.Component);
+    mtsui.Icon = Icon;
+})(mtsui || (mtsui = {}));
+/// <reference path="Component.ts"/>
+/// <reference path="Icon.ts"/>
+var mtsui;
+(function (mtsui) {
     var Button = (function (_super) {
         __extends(Button, _super);
         function Button(value, click_cb) {
@@ -693,9 +723,9 @@ var mtsui;
 
             _super.call(this, input);
         }
-        Button.prototype.addIcon = function (icon_class, pos) {
-            var icon = document.createElement("span");
-            icon.setAttribute("class", "mtsui icon " + icon_class + " " + pos);
+        Button.prototype.addIcon = function (icon_comp, pos) {
+            var icon = icon_comp.getDom();
+            icon.setAttribute("class", "mtsui icon " + pos);
 
             if (this.icon)
                 this.getDom().firstChild.removeChild(this.icon);
@@ -766,11 +796,14 @@ var mtsui;
 
     var IconListItem = (function (_super) {
         __extends(IconListItem, _super);
-        function IconListItem(icon_class, value, position) {
+        function IconListItem(comp, value, position) {
             _super.call(this, value);
 
+            var compdom = comp.getDom();
+            compdom.className += " " + position;
+
             var icon = document.createElement("td");
-            icon.setAttribute("class", "mtsui listicon " + icon_class);
+            icon.appendChild(compdom);
 
             if (position && position === "right")
                 _super.prototype.getDom.call(this).firstChild.firstChild.appendChild(icon);
@@ -809,6 +842,7 @@ else
 /// <reference path="mtsui/AlertBox.ts"/>
 /// <reference path="mtsui/Button.ts"/>
 /// <reference path="mtsui/List.ts"/>
+/// <reference path="mtsui/Icon.ts"/>
 function createSimpleTextComponent(text) {
     var node = document.createElement("h1");
     var title = text || "";
@@ -854,25 +888,9 @@ function createWindow(title, content, modal) {
         var bt_back = new mtsui.Button("back", function () {
             newpage.getWindow().back();
         });
-        bt_back.addIcon("fa fa-arrow-left", "left");
-        bt_back.addIcon("fa fa-arrow-left", "top");
-        bt_back.addIcon("fa fa-arrow-left", "bottom");
-        bt_back.addIcon("fa fa-arrow-left", "right");
+        bt_back.addIcon(new mtsui.Icon("fa fa-arrow-left"), "right");
 
         newpage.add(bt_back);
-
-        var list = new mtsui.List();
-        list.add(new mtsui.ListItem("Blubber"));
-        list.add(new mtsui.ListItem("Blubber"));
-        list.add(new mtsui.ListItem("Blubber"));
-        list.add(new mtsui.ListItem("Blubber"));
-        var iconListItem = new mtsui.IconListItem("fa fa-chevron-right", "Blubber");
-        iconListItem.setOnclick(function () {
-            alert("clicked");
-        });
-        list.add(iconListItem);
-
-        newpage.add(list);
     };
     mypage.add(new mtsui.Component(link));
 
@@ -900,6 +918,38 @@ function createWindow(title, content, modal) {
         mtsui.WindowManager.openModal(mywindow, true);
 else
         mtsui.WindowManager.openFullscreen(mywindow);
+
+    var list = new mtsui.List();
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+    list.add(new mtsui.ListItem("Blubber"));
+
+    var iconListItem = new mtsui.IconListItem(new mtsui.Icon("fa fa-chevron-right"), "Blubber", "right");
+    iconListItem.setOnclick(function () {
+        alert("clicked");
+    });
+    list.add(iconListItem);
+
+    mypage.add(list);
 }
 
 window.onload = function () {

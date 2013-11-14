@@ -36,6 +36,13 @@ module mtsui {
                 node.appendChild(titleNode);
     
                 this.header.setMiddle(new Component(node));
+                
+                var content: HTMLElement = <HTMLElement> super.getDom().firstChild;
+                var header = this.header;
+                /* wait for relayout to get the calculated scrollHeight */
+                setTimeout(function(){
+                    content.style.top = header.getDom().scrollHeight + "px";
+                }, 0);
             }
         }
 
@@ -49,6 +56,12 @@ module mtsui {
             
             this.div.appendChild(header.getDom());
             this.header = header;
+            
+            var content: HTMLElement = <HTMLElement> super.getDom().firstChild;
+            /* wait for relayout to get the calculated scrollHeight */
+            setTimeout(function(){
+                content.style.top = header.getDom().scrollHeight + "px";
+            }, 0);
         }
         
         public getWindow(): Window {

@@ -1,4 +1,5 @@
 /// <reference path="Component.ts"/>
+/// <reference path="Icon.ts"/>
 
 module mtsui {    
     export class Button extends Component {
@@ -20,9 +21,9 @@ module mtsui {
             super(input);
         }
         
-        public addIcon(icon_class?: String, pos?: String): void {
-            var icon: HTMLElement = document.createElement("span");
-            icon.setAttribute("class", "mtsui icon " + icon_class + " " + pos);
+        public addIcon(icon_comp?: Icon, pos?: String): void {
+            var icon: HTMLElement = icon_comp.getDom();
+            icon.setAttribute("class", "mtsui icon " + pos);
             
             if(this.icon) this.getDom().firstChild.removeChild(this.icon);
             

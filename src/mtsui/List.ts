@@ -33,11 +33,14 @@ module mtsui {
     }
     
     export class IconListItem extends ListItem {        
-        constructor(icon_class: String, value?: String, position?: String){
+        constructor(comp: Component, value?: String, position?: String){
             super(value);
             
-            var icon: HTMLElement = document.createElement("td");
-            icon.setAttribute("class", "mtsui listicon " + icon_class);
+            var compdom = comp.getDom();
+            compdom.className += " " + position;
+            
+            var icon = document.createElement("td");
+            icon.appendChild(compdom);
             
             if(position && position === "right") super.getDom().firstChild.firstChild.appendChild(icon);
             if(position && position === "left") super.getDom().firstChild.firstChild.insertBefore(icon, super.getDom().firstChild.firstChild);
