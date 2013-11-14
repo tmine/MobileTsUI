@@ -794,9 +794,9 @@ var mtsui;
     })(mtsui.Component);
     mtsui.ListItem = ListItem;
 
-    var IconListItem = (function (_super) {
-        __extends(IconListItem, _super);
-        function IconListItem(comp, value, position) {
+    var ListItemDecorator = (function (_super) {
+        __extends(ListItemDecorator, _super);
+        function ListItemDecorator(comp, value, position) {
             _super.call(this, value);
 
             var compdom = comp.getDom();
@@ -812,9 +812,9 @@ var mtsui;
 else
                 _super.prototype.getDom.call(this).firstChild.firstChild.appendChild(icon);
         }
-        return IconListItem;
+        return ListItemDecorator;
     })(ListItem);
-    mtsui.IconListItem = IconListItem;
+    mtsui.ListItemDecorator = ListItemDecorator;
 
     var List = (function (_super) {
         __extends(List, _super);
@@ -943,17 +943,17 @@ else
     list.add(new mtsui.ListItem("Blubber"));
     list.add(new mtsui.ListItem("Blubber"));
 
-    var iconListItem = new mtsui.IconListItem(new mtsui.Icon("fa fa-chevron-right"), "Blubber", "right");
-    iconListItem.setOnclick(function () {
+    var listItem = new mtsui.ListItemDecorator(new mtsui.Icon("fa fa-chevron-right"), "Blubber", "right");
+    listItem.setOnclick(function () {
         alert("clicked");
     });
-    list.add(iconListItem);
+    list.add(listItem);
 
     mypage.add(list);
 }
 
 window.onload = function () {
-    createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
+    createWindow("Test Window", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
     /*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds", false);}, 1000);
     setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 2000);
     setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 3000);

@@ -84,7 +84,7 @@ function createWindow(title, content, modal) {
     else mtsui.WindowManager.openFullscreen(mywindow);
     
     
-    var list: mtsui.List = new mtsui.List();
+    var list: mtsui.List = new mtsui.List();    
     list.add(new mtsui.ListItem("Blubber"));
     list.add(new mtsui.ListItem("Blubber"));
     list.add(new mtsui.ListItem("Blubber"));
@@ -108,20 +108,18 @@ function createWindow(title, content, modal) {
     list.add(new mtsui.ListItem("Blubber"));
     list.add(new mtsui.ListItem("Blubber"));
     
-    var iconListItem: mtsui.IconListItem = new mtsui.IconListItem(new mtsui.Icon("fa fa-chevron-right"), "Blubber", "right");
-    iconListItem.setOnclick(function(){
+    var listItem: mtsui.ListItemDecorator = new mtsui.ListItemDecorator(new mtsui.Icon("fa fa-chevron-right"), "Blubber", "right");
+    listItem.setOnclick(function(){
         alert("clicked");
     });
-    list.add(iconListItem);
+    list.add(listItem);
     
     mypage.add(list);
-    
-    
     
 }
 
 window.onload = function() {
-    createWindow("1", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
+    createWindow("Test Window", "sdkljfhlskdj hfkjshdf kjhsakjlf sdkaljhf kjlsd ", false);
     /*setTimeout(function(){createWindow("2", "jl hsdflkjhkjdaf kjds", false);}, 1000);
     setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 2000);
     setTimeout(function(){createWindow("3", "jl hsdflkjhkjdaf kjds", false);}, 3000);

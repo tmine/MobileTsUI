@@ -32,7 +32,7 @@ module mtsui {
         }
     }
     
-    export class IconListItem extends ListItem {        
+    export class ListItemDecorator extends ListItem {        
         constructor(comp: Component, value?: String, position?: String){
             super(value);
             

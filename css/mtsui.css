@@ -269,6 +269,9 @@ body.debug {
 	padding: 5px;
 	width: 100%;
 }
+.mtsui.list .mtsui.component:last-child .mtsui.listitem {
+	border: none;
+}
 
 .mtsui.list .mtsui.listitem .mtsui.listtext {
 }
