@@ -4,49 +4,49 @@
 /// <reference path="Window.ts"/>
 
 module mtscui {
-	export class Page extends Component{
-		private title : String;
-		private window : Window;
-		private header : Header;
-		private body : Component;
-		private div : HTMLElement;
+    export class Page extends Component {
+        private title: String;
+        private window: Window;
+        private header: Header;
+        private body: Component;
+        private div: HTMLElement;
 
-		constructor(window : Window, title? : String){
-			this.window = window;
-			this.header = new Header();
+        constructor(window: Window, title?: String) {
+            this.window = window;
+            this.header = new Header();
 
-			this.div = document.createElement("div");
-			this.div.setAttribute("class", "mtscui page");
+            this.div = document.createElement("div");
+            this.div.setAttribute("class", "mtscui page");
 
-			this.div.appendChild(this.header.getDom());
+            this.div.appendChild(this.header.getDom());
 
-			var body : HTMLElement = document.createElement("div");
-			body.setAttribute("class", "mtscui content");
+            var body: HTMLElement = document.createElement("div");
+            body.setAttribute("class", "mtscui content");
 
-			super(body);
+            super(body);
 
-			this.div.appendChild(super.getDom());
+            this.div.appendChild(super.getDom());
 
-			this.title = title;
+            this.title = title;
 
-			var node = document.createElement("h1");
-			var title : String = this.title || "";
-			var titleNode = document.createTextNode(title.toString());
-			node.appendChild(titleNode);
+            var node = document.createElement("h1");
+            var title: String = this.title || "";
+            var titleNode = document.createTextNode(title.toString());
+            node.appendChild(titleNode);
 
-			this.header.setMiddle(new Component(node));
-		}
+            this.header.setMiddle(new Component(node));
+        }
 
-		public getHeader() : Header {
-			return this.header;
-		}
+        public getHeader(): Header {
+            return this.header;
+        }
 
-		public getWindow() : Window {
-			return this.window;
-		}
+        public getWindow(): Window {
+            return this.window;
+        }
 
-		public getDom() : HTMLElement {
-			return this.div;
-		}
-	}
+        public getDom(): HTMLElement {
+            return this.div;
+        }
+    }
 }

@@ -6,18 +6,18 @@
 
 module mtscui {
 
-	export class AlertBox extends Popup {
-		constructor(title? : String, text? : String, callback? : Function){
-			var component : Component = new Component(document.createElement("div"));
+    export class AlertBox extends Popup {
+        constructor(title?: String, text?: String, callback?: Function) {
+            var component: Component = new Component(document.createElement("div"));
 
-			var textelem = document.createElement("p")
+            var textelem = document.createElement("p")
 			var textnode = document.createTextNode("" + text);
-			textelem.appendChild(textnode);
+            textelem.appendChild(textnode);
 
-			component.add(new Component(textelem));
+            component.add(new Component(textelem));
 
-			super(title, component);
-		}
-	}
+            super(title, component);
+        }
+    }
 
 }

@@ -5,16 +5,16 @@
 
 module mtscui {
 
-	export class Popup extends Window {
-		constructor(title? : String, component? : Component){
-			super(title);
+    export class Popup extends Window {
+        constructor(title?: String, component?: Component) {
+            super(title);
 
-			var page : Page = this.getActualPage();
-			if(component) page.add(component);
+            var page: Page = this.getActualPage();
+            if (component) page.add(component);
 
-			this.getDom().className += " popup";
+            this.getDom().className += " popup";
 
-			WindowManager.openModal(this);
-		}
-	}
+            WindowManager.openModal(this);
+        }
+    }
 }

@@ -3,29 +3,29 @@
 /// <reference path="../tsc/ui/View.ts"/>
 
 module mtscui {
-	export class Component extends tsc.ui.View{
-		private components : tsc.util.List<Component>;
-		private dom : HTMLElement ;
+    export class Component extends tsc.ui.View {
+        private components: tsc.util.List<Component>;
+        private dom: HTMLElement;
 
-		constructor(template : any){
-			super(template);
-			this.components = new tsc.util.LinkedList<Component>();
+        constructor(template: any) {
+            super(template);
+            this.components = new tsc.util.LinkedList<Component>();
 
-			this.dom = document.createElement("div");
-			this.dom.setAttribute("class", "mtscui component");
-		}
+            this.dom = document.createElement("div");
+            this.dom.setAttribute("class", "mtscui component");
+        }
 
-		public add(component : Component) : void {
-			super.getDom().appendChild(component.getDom());
-		}
+        public add(component: Component): void {
+            super.getDom().appendChild(component.getDom());
+        }
 
-		public remove(component : Component) : void {
-			super.getDom().removeChild(component.getDom());
-		}
+        public remove(component: Component): void {
+            super.getDom().removeChild(component.getDom());
+        }
 
-		public getDom() : HTMLElement {
-			this.dom.appendChild(super.getDom());
-			return this.dom;
-		}
-	}
+        public getDom(): HTMLElement {
+            this.dom.appendChild(super.getDom());
+            return this.dom;
+        }
+    }
 }
