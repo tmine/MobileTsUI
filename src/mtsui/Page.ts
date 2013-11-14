@@ -15,10 +15,10 @@ module mtsui {
             this.window = window;
 
             this.div = document.createElement("div");
-            this.div.setAttribute("class", "mtscui page");
+            this.div.setAttribute("class", "mtsui page");
             
             var body: HTMLElement = document.createElement("div");
-            body.setAttribute("class", "mtscui content");
+            body.setAttribute("class", "mtsui content");
 
             super(body);
 

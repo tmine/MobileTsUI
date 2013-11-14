@@ -12,7 +12,7 @@ module mtsui {
             this.components = new tsc.util.LinkedList<Component>();
 
             this.dom = document.createElement("div");
-            this.dom.setAttribute("class", "mtscui component");
+            this.dom.setAttribute("class", "mtsui component");
         }
 
         public add(component: Component): void {

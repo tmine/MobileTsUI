@@ -9,7 +9,7 @@ module mtsui {
 
         constructor(left?: Component, middle?: Component, right?: Component) {
             var instance: HTMLElement = document.createElement("div");
-            instance.setAttribute("class", "mtscui header");
+            instance.setAttribute("class", "mtsui header");
 
             this.left = left;
             this.middle = middle;
@@ -20,7 +20,7 @@ module mtsui {
                 this.left = new Component(dom);
             }
             var dom: HTMLElement = this.left.getDom();
-            dom.setAttribute("class", "mtscui left");
+            dom.setAttribute("class", "mtsui left");
             instance.appendChild(dom);
 
 
@@ -29,7 +29,7 @@ module mtsui {
                 this.middle = new Component(dom);
             }
             var dom: HTMLElement = this.middle.getDom();
-            dom.setAttribute("class", "mtscui middle");
+            dom.setAttribute("class", "mtsui middle");
             instance.appendChild(dom);
 
             if (!this.right) {
@@ -37,7 +37,7 @@ module mtsui {
                 this.right = new Component(dom);
             }
             var dom: HTMLElement = this.right.getDom();
-            dom.setAttribute("class", "mtscui right");
+            dom.setAttribute("class", "mtsui right");
             instance.appendChild(dom);
 
             super(instance);
@@ -49,7 +49,7 @@ module mtsui {
             this.left = comp;
 
             var dom = this.left.getDom();
-            dom.setAttribute("class", "mtscui left");
+            dom.setAttribute("class", "mtsui left");
             this.getDom().insertBefore(dom, this.middle.getDom());
         }
 
@@ -59,7 +59,7 @@ module mtsui {
             this.middle = comp;
 
             var dom = this.middle.getDom();
-            dom.setAttribute("class", "mtscui middle");
+            dom.setAttribute("class", "mtsui middle");
             this.getDom().insertBefore(dom, this.right.getDom());
         }
 
@@ -69,7 +69,7 @@ module mtsui {
             this.right = comp;
 
             var dom = this.right.getDom();
-            dom.setAttribute("class", "mtscui right");
+            dom.setAttribute("class", "mtsui right");
             this.getDom().appendChild(dom);
         }
         

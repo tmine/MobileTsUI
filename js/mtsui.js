@@ -249,7 +249,7 @@ var mtsui;
             this.components = new tsc.util.LinkedList();
 
             this.dom = document.createElement("div");
-            this.dom.setAttribute("class", "mtscui component");
+            this.dom.setAttribute("class", "mtsui component");
         }
         Component.prototype.add = function (component) {
             _super.prototype.getDom.call(this).appendChild(component.getDom());
@@ -275,7 +275,7 @@ var mtsui;
         __extends(Header, _super);
         function Header(left, middle, right) {
             var instance = document.createElement("div");
-            instance.setAttribute("class", "mtscui header");
+            instance.setAttribute("class", "mtsui header");
 
             this.left = left;
             this.middle = middle;
@@ -286,7 +286,7 @@ var mtsui;
                 this.left = new mtsui.Component(dom);
             }
             var dom = this.left.getDom();
-            dom.setAttribute("class", "mtscui left");
+            dom.setAttribute("class", "mtsui left");
             instance.appendChild(dom);
 
             if (!this.middle) {
@@ -294,7 +294,7 @@ var mtsui;
                 this.middle = new mtsui.Component(dom);
             }
             var dom = this.middle.getDom();
-            dom.setAttribute("class", "mtscui middle");
+            dom.setAttribute("class", "mtsui middle");
             instance.appendChild(dom);
 
             if (!this.right) {
@@ -302,7 +302,7 @@ var mtsui;
                 this.right = new mtsui.Component(dom);
             }
             var dom = this.right.getDom();
-            dom.setAttribute("class", "mtscui right");
+            dom.setAttribute("class", "mtsui right");
             instance.appendChild(dom);
 
             _super.call(this, instance);
@@ -313,7 +313,7 @@ var mtsui;
             this.left = comp;
 
             var dom = this.left.getDom();
-            dom.setAttribute("class", "mtscui left");
+            dom.setAttribute("class", "mtsui left");
             this.getDom().insertBefore(dom, this.middle.getDom());
         };
 
@@ -323,7 +323,7 @@ var mtsui;
             this.middle = comp;
 
             var dom = this.middle.getDom();
-            dom.setAttribute("class", "mtscui middle");
+            dom.setAttribute("class", "mtsui middle");
             this.getDom().insertBefore(dom, this.right.getDom());
         };
 
@@ -333,7 +333,7 @@ var mtsui;
             this.right = comp;
 
             var dom = this.right.getDom();
-            dom.setAttribute("class", "mtscui right");
+            dom.setAttribute("class", "mtsui right");
             this.getDom().appendChild(dom);
         };
 
@@ -364,10 +364,10 @@ var mtsui;
             this.window = window;
 
             this.div = document.createElement("div");
-            this.div.setAttribute("class", "mtscui page");
+            this.div.setAttribute("class", "mtsui page");
 
             var body = document.createElement("div");
-            body.setAttribute("class", "mtscui content");
+            body.setAttribute("class", "mtsui content");
 
             _super.call(this, body);
 
@@ -423,7 +423,7 @@ var mtsui;
             this.pageStack = new tsc.util.Stack();
 
             var instance = document.createElement("div");
-            instance.setAttribute("class", "mtscui window");
+            instance.setAttribute("class", "mtsui window");
             _super.call(this, instance);
 
             var page = this.createPage(title);
@@ -567,7 +567,7 @@ else if (position === "right")
                 header.setRight(icon);
 
             this.menu = document.createElement("div");
-            this.menu.setAttribute("class", "mtscui menu page " + position);
+            this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
 
             var window = this.page.getWindow();

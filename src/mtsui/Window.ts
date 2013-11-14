@@ -10,7 +10,7 @@ module mtsui {
             this.pageStack = new tsc.util.Stack<Page>();
 
             var instance: HTMLElement = document.createElement("div");
-            instance.setAttribute("class", "mtscui window");
+            instance.setAttribute("class", "mtsui window");
             super(instance);
 
             var page: Page = this.createPage(title);

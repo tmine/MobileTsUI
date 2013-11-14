@@ -18,7 +18,7 @@ module mtsui {
             else if (position === "right") header.setRight(icon);
 
             this.menu = document.createElement("div");
-            this.menu.setAttribute("class", "mtscui menu page " + position);
+            this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
 
             var window: Window = this.page.getWindow();

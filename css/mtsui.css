@@ -16,43 +16,43 @@ body.debug {
 	--background-color: black;
 }
 
-.debug .mtscui.window .mtscui.header {
+.debug .mtsui.window .mtsui.header {
 	position: absolute;
 }
 
-.debug .mtscui.window:nth-of-type(2) {
+.debug .mtsui.window:nth-of-type(2) {
 	left: 20px;
 	top: -20px;
 	bottom: 20px;
 	right: -20px;
 }
-.debug .mtscui.window:nth-of-type(3) {
+.debug .mtsui.window:nth-of-type(3) {
 	left: 40px;
 	top: -40px;
 	bottom: 40px;
 	right: -40px;
 }
-.debug .mtscui.window:nth-of-type(4) {
+.debug .mtsui.window:nth-of-type(4) {
 	left: 60px;
 	top: -60px;
 	bottom: 60px;
 	right: -60px;
 }
-.debug .mtscui.window:nth-of-type(5) {
+.debug .mtsui.window:nth-of-type(5) {
 	left: 80px;
 	top: -80px;
 	bottom: 80px;
 	right: -80px;
 }
 
-.debug .mtscui.window:nth-of-type(6) {
+.debug .mtsui.window:nth-of-type(6) {
 	left: 100px;
 	bottom: 100px;
 	right: -100px;
 	top: -100px;
 }
 
-.debug .mtscui.window.hide {
+.debug .mtsui.window.hide {
 	-webkit-filter: blur(2px) !important;
     -moz-filter: blur(2px) !important;
     -o-filter: blur(2px) !important;
@@ -62,7 +62,7 @@ body.debug {
 
 
 /* Component */
-.debug .mtscui.component {
+.debug .mtsui.component {
 	border: solid 1px black !important;
 	margin: 5px !important;
 	padding: 5px !important;
@@ -70,8 +70,8 @@ body.debug {
 
 /* end Test */
 
-/* Global mtscui */
-*.mtscui .mtscui * {
+/* Global mtsui */
+*.mtsui .mtsui * {
 	margin: 0;
 	padding: 0;
 
@@ -81,7 +81,7 @@ body.debug {
 }
 
 /* Window */
-.mtscui.window {
+.mtsui.window {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -91,7 +91,7 @@ body.debug {
 	overflow: hidden;
 }
 
-.mtscui.window.hide {
+.mtsui.window.hide {
 	-webkit-filter: blur(20px);
     -moz-filter: blur(20px);
     -o-filter: blur(20px);
@@ -99,12 +99,12 @@ body.debug {
     filter: blur(20px);
 }
 
-.mtscui.window.modal {
+.mtsui.window.modal {
 	background: transparent;
 	z-index: 0;
 }
 
-.mtscui.window.modal .mtscui.window {
+.mtsui.window.modal .mtsui.window {
 	left: 10%;
 	right: 10%;
 	top: 20px;
@@ -116,7 +116,7 @@ body.debug {
 	z-index: 1;
 }
 
-.mtscui.window.modal .mtscui.window.popup {
+.mtsui.window.modal .mtsui.window.popup {
 	left: 10%;
 	right: 10%;
 	top: 20px;
@@ -127,7 +127,7 @@ body.debug {
 
 
 /* Page */
-.mtscui.window .mtscui.page {
+.mtsui.window .mtsui.page {
 	padding-top: 40px;
 	position: absolute;
 	top: 0;
@@ -139,23 +139,23 @@ body.debug {
 	transition: all 1s;
 }
 
-.mtscui.window .mtscui.page.transition.slide.hide.left {
+.mtsui.window .mtsui.page.transition.slide.hide.left {
 	left: -110%;
 	right: 110%;
 	opacity: 0;
 }
-.mtscui.window .mtscui.page.transition.slide.right {
+.mtsui.window .mtsui.page.transition.slide.right {
 	left: 110%;
 	right: -110%;
 	opacity: 0;
 }
-.mtscui.window.fullscreen .mtscui.page.transition.slide.in .mtscui.header {
+.mtsui.window.fullscreen .mtsui.page.transition.slide.in .mtsui.header {
 	position: fixed;
 }
 
 
 /* Menu */
-.mtscui.window .mtscui.menu.page {
+.mtsui.window .mtsui.menu.page {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -169,40 +169,40 @@ body.debug {
 	background-color: rgba(0, 0, 255, 0.5);
 }
 
-.mtscui.window .mtscui.menu.page.right {
+.mtsui.window .mtsui.menu.page.right {
 	right: -80%;
 }
-.mtscui.window .mtscui.page.right.hide {
+.mtsui.window .mtsui.page.right.hide {
 	right: 80%;
 	left: -80%;
 }
 
 
-.mtscui.window .mtscui.menu.page.left {
+.mtsui.window .mtsui.menu.page.left {
 	left: -80%;
 }
-.mtscui.window .mtscui.page.left.hide {
+.mtsui.window .mtsui.page.left.hide {
 	left: 80%;
 	right: -80%;
 }
 
-.mtscui.window .mtscui.menu.page.right.show {
+.mtsui.window .mtsui.menu.page.right.show {
 	right: 0;
 }
 
-.mtscui.window .mtscui.menu.page.left.show {
+.mtsui.window .mtsui.menu.page.left.show {
 	left: 0;
 }
 
 /* Page Header */
-.mtscui.window .mtscui.page .mtscui.header {
+.mtsui.window .mtsui.page .mtsui.header {
 	position: absolute;
 	top: 0;
 	right: 0;
 	left: 0;
 	height: 40px;
 }
-.mtscui.window .mtscui.page .mtscui.header .mtscui.left {	
+.mtsui.window .mtsui.page .mtsui.header .mtsui.left {	
 	padding-left: 2%;
 	width: 15%;
 	white-space: nowrap;
@@ -211,7 +211,7 @@ body.debug {
 	height: 40px;
 	text-align: left;
 }
-.mtscui.window .mtscui.page .mtscui.header .mtscui.middle {
+.mtsui.window .mtsui.page .mtsui.header .mtsui.middle {
 	width: 70%;
 	text-align: center;
 	white-space: nowrap;
@@ -220,7 +220,7 @@ body.debug {
 	height: 40px;
 }
 
-.mtscui.window .mtscui.page .mtscui.header .mtscui.right {
+.mtsui.window .mtsui.page .mtsui.header .mtsui.right {
 	padding-right: 2%;
 	width: 15%;
 	white-space: nowrap;
@@ -231,6 +231,6 @@ body.debug {
 }
 
 /* Page Content */
-.mtscui.window .mtscui.page .mtscui.component {
+.mtsui.window .mtsui.page .mtsui.component {
 	margin: 5px;
 }
