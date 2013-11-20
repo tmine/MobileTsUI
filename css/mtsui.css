@@ -134,7 +134,7 @@ body.debug {
 	bottom: 0;
 
 	opacity: 1;
-	transition: all 1s;
+	transition: all 0.5s;
 }
 
 .mtsui.window .mtsui.page.transition.slide.hide.left {
@@ -163,8 +163,6 @@ body.debug {
 	right: auto;
 
 	padding-top: 0;
-
-	background-color: rgba(0, 0, 255, 0.5);
 }
 
 .mtsui.window .mtsui.menu.page.right {

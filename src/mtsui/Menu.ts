@@ -7,28 +7,29 @@ module mtsui {
     export class Menu {
         private visible: boolean;
         private menu: HTMLElement;
-        private page: Page;
+        private window: Window;
         private position: String;
 
-        constructor(page: Page, header: Header, icon: Component, content: Component, position: String) {
-            this.page = page;
+        constructor(window: Window, content: Component, position: String) {
+            this.window = window;
             this.position = position;
-
-            if (position === "left") header.setLeft(icon);
-            else if (position === "right") header.setRight(icon);
 
             this.menu = document.createElement("div");
             this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
-
-            var window: Window = this.page.getWindow();
-            window.getDom().appendChild(this.menu);
-
+		}
+        
+        public addTo(header: Header, icon: Component): void{
+            this.window.getDom().appendChild(this.menu);
+            
+            if (this.position === "left") header.setLeft(icon);
+            else if (this.position === "right") header.setRight(icon);
+            
             var _this = this;
             icon.getDom().onclick = function() {
                 _this.toggle();
             }
-		}
+        }
 
         private toggle(): void {
             if (this.visible) this.hide();
@@ -36,12 +37,14 @@ module mtsui {
         }
 
         public show(): void {
+            var page = this.window.getActualPage();
+            
             if (this.menu.className.indexOf("show") == -1) this.menu.className += " show";
-            if (this.page.getDom().className.indexOf("hide " + this.position) == -1) this.page.getDom().className += " hide " + this.position;
+            if (page.getDom().className.indexOf("hide " + this.position) == -1) page.getDom().className += " hide " + this.position;
 
             var _this = this;
             setTimeout(function() {
-                _this.page.getDom().onclick = function() {
+                page.getDom().onclick = function() {
                     _this.toggle();
                 }
 			}, 0);
@@ -50,12 +53,15 @@ module mtsui {
         }
 
         public hide(): void {
+            var page = this.window.getActualPage();
+            
             if (this.menu.className.indexOf(" show") != -1) this.menu.className = this.menu.className.replace(" show", "");
-            if (this.page.getDom().className.indexOf(" hide " + this.position) != -1) this.page.getDom().className = this.page.getDom().className.replace(" hide " + this.position, "");
+            if (page.getDom().className.indexOf(" hide " + this.position) != -1) page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");
 
-            this.page.getDom().onclick = function() { };
+            page.getDom().onclick = function() { };
 
             this.visible = false;
         }
+
     }
 }

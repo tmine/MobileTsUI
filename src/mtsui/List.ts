@@ -11,15 +11,20 @@ module mtsui {
             this.item = document.createElement("table");
             this.item.setAttribute("class", "mtsui listitem");
             
-            super(this.item);
-            
-            if(value instanceof Component){
+            if(value instanceof ListItem){
+                this.item = value.getDom().firstChild; 
+                super(this.item);
+            } else if(value instanceof Component){
+                super(this.item);
+                
                 var tr: HTMLElement = document.createElement("tr");
                 var text: HTMLElement = document.createElement("td");
                 text.appendChild(value.getDom());
                 tr.appendChild(text);
                 super.getDom().firstChild.appendChild(tr);
             } else if(value) {
+                super(this.item);
+                
                 var tr: HTMLElement = document.createElement("tr");
                 var text: HTMLElement = document.createElement("td");
                 text.setAttribute("class", "mtsui listtext");

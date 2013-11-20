@@ -64,6 +64,10 @@ module mtsui {
             }, 0);
         }
         
+        public getHeader(): Header{
+            return this.header;
+        }
+        
         public getWindow(): Window {
             return this.window;
         }
