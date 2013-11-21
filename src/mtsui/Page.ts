@@ -13,7 +13,6 @@ module mtsui {
 
         constructor(window: Window, title?: String) {
             this.window = window;
-
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtsui page");
             
@@ -46,13 +45,17 @@ module mtsui {
             }
         }
 
+        public getWindow(): Window{
+            return this.window;
+        }
+        
         public addHeader(header: Header): void{
             if(this.header) this.div.removeChild(this.header.getDom());
             
             // check if our header has already some elements, if true copy them to new header if it havn't got its own
-            if(this.header.getLeft().getDom().innerHTML != "<span></span>" && header.getLeft().getDom().innerHTML == "<span></span>") header.setLeft(this.header.getLeft()); 
-            if(this.header.getMiddle().getDom().innerHTML != "<span></span>" && header.getMiddle().getDom().innerHTML == "<span></span>") header.setMiddle(this.header.getMiddle());
-            if(this.header.getRight().getDom().innerHTML != "<span></span>" && header.getRight().getDom().innerHTML == "<span></span>") header.setRight(this.header.getRight()); 
+            if(this.header && this.header.getLeft().getDom().innerHTML != "<span></span>" && header.getLeft().getDom().innerHTML == "<span></span>") header.setLeft(this.header.getLeft()); 
+            if(this.header && this.header.getMiddle().getDom().innerHTML != "<span></span>" && header.getMiddle().getDom().innerHTML == "<span></span>") header.setMiddle(this.header.getMiddle());
+            if(this.header && this.header.getRight().getDom().innerHTML != "<span></span>" && header.getRight().getDom().innerHTML == "<span></span>") header.setRight(this.header.getRight()); 
             
             this.div.appendChild(header.getDom());
             this.header = header;
@@ -66,10 +69,6 @@ module mtsui {
         
         public getHeader(): Header{
             return this.header;
-        }
-        
-        public getWindow(): Window {
-            return this.window;
         }
 
         public getDom(): HTMLElement {

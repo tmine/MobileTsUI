@@ -7,11 +7,9 @@ module mtsui {
 
         private static open(window: Window): void {
             // hide other window if exist
-            var old: Window = WindowManager.windowStack.pop();
+            var old: Window = WindowManager.windowStack.peek();
             if (old) {
                 old.getDom().className += " hide";
-
-                WindowManager.windowStack.push(old);
             }
 
             // Add new window to stack
@@ -45,14 +43,24 @@ module mtsui {
 			WindowManager.open(temp);
         }
 
+        public static closeWindow(window: Window): void{
+            // Remove window from body
+            document.body.removeChild(window.getDom());
+            
+            if(window == WindowManager.windowStack.peek()){
+                WindowManager.windowStack.pop();
+                var window: Window = WindowManager.windowStack.peek();
+                if(window) window.getDom().className = window.getDom().className.replace(" hide", "");
+            }
+        }
+        
         public static close(): void {
             var window: Window = WindowManager.windowStack.pop();
             // Remove window from body
             document.body.removeChild(window.getDom());
 
-            var window: Window = WindowManager.windowStack.pop();
-            window.getDom().className = window.getDom().className.replace(" hide", "");
-            WindowManager.windowStack.push(window);
+            var window: Window = WindowManager.windowStack.peek();
+            if(window) window.getDom().className = window.getDom().className.replace(" hide", "");
         }
 
     }

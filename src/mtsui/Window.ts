@@ -13,7 +13,7 @@ module mtsui {
             instance.setAttribute("class", "mtsui window");
             super(instance);
 
-            var page: Page = this.createPage(title);
+            var page: Page = new Page(this, title);
             instance.appendChild(page.getDom());
             this.pageStack.push(page);
         }
@@ -31,8 +31,8 @@ module mtsui {
             }
         }
         
-        public createPage(title?: String): Page {
-            return new Page(this, title);
+        public close(): void{
+            WindowManager.closeWindow(this);
         }
 
         public navigateTo(page: Page, transitiontype?: String): void {
@@ -71,7 +71,7 @@ module mtsui {
 
             setTimeout(function() {
                 oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
-                superdom.removeChild(oldPage.getDom());
+                if(oldPage.getDom().parentNode == superdom) superdom.removeChild(oldPage.getDom());
                 
                 page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
             }, 1000);
