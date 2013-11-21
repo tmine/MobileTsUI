@@ -89,6 +89,7 @@ body.debug {
 	left: 0;
 	background-color: rgba(255, 255, 255, 0.5);
 	overflow: hidden;
+	z-index: 1;
 }
 
 .mtsui.window.hide {
@@ -161,7 +162,7 @@ body.debug {
 	height: 100%;
 	left: auto;
 	right: auto;
-
+	z-index: 10;
 	padding-top: 0;
 }
 
@@ -212,10 +213,14 @@ body.debug {
 .mtsui.window .mtsui.page .mtsui.header .mtsui.middle {
 	width: 70%;
 	text-align: center;
-	white-space: nowrap;
-	text-overflow: ellipsis;
 	float: left;
 	height: 40px;
+}
+
+.mtsui.window .mtsui.page .mtsui.header .mtsui.middle * {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 .mtsui.window .mtsui.page .mtsui.header .mtsui.right {
@@ -259,11 +264,10 @@ body.debug {
 
 /* List */
 .mtsui.list {
-	margin-top: 20px;
 }
 
 .mtsui.list .mtsui.listitem {
-	border-bottom: solid 1px black;
+	border-bottom: 1px solid #ccc;
 	padding: 5px;
 	width: 100%;
 }
@@ -276,4 +280,6 @@ body.debug {
 
 .mtsui.list .mtsui.listitem .mtsui.right {
 	text-align: right;
+	margin-right: 5px;
+	font-size: 12px;
 }
