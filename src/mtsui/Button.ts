@@ -32,11 +32,13 @@ module mtsui {
             
             if(!pos || pos === "right"){
                 input.appendChild(icon);
+                icon.style.display = "inline";
                 inputFirstChild.style.display = "inline";
             }
             
             if(pos === "left") {
                 input.insertBefore(icon, inputFirstChild);
+                icon.style.display = "inline";
                 inputFirstChild.style.display = "inline";
             }
             
