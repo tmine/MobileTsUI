@@ -38,13 +38,18 @@ module mtsui {
 
         public show(): void {
             var page = this.window.getActualPage();
+            var clone = <HTMLElement> page.getDom().cloneNode(false);
+            
+            this.window.getDom().appendChild(clone);
             
             if (this.menu.className.indexOf("show") == -1) this.menu.className += " show";
             if (page.getDom().className.indexOf("hide " + this.position) == -1) page.getDom().className += " hide " + this.position;
+            if (clone.className.indexOf("hide " + this.position) == -1) clone.className += " hide " + this.position;
 
             var _this = this;
             setTimeout(function() {
-                page.getDom().onclick = function() {
+                clone.onclick = function() {
+                    _this.window.getDom().removeChild(clone);
                     _this.toggle();
                 }
 			}, 0);

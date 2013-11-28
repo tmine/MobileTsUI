@@ -136,6 +136,8 @@ body.debug {
 
 	opacity: 1;
 	transition: all 0.5s;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
 }
 
 .mtsui.window .mtsui.page.transition.slide.hide.left {
@@ -164,6 +166,9 @@ body.debug {
 	right: auto;
 	z-index: 10;
 	padding-top: 0;
+	
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .mtsui.window .mtsui.menu.page.right {
@@ -281,5 +286,5 @@ body.debug {
 .mtsui.list .mtsui.listitem .mtsui.right {
 	text-align: right;
 	margin-right: 5px;
-	font-size: 12px;
+	font-size: 18px;
 }
