@@ -12,8 +12,6 @@ body.debug {
 	left: 2px;
 	top: 16px;
 	font-size: 0.4em;
-
-	--background-color: black;
 }
 
 .debug .mtsui.window .mtsui.header {
@@ -88,6 +86,7 @@ body.debug {
 	right: 0;
 	left: 0;
 	background-color: rgba(255, 255, 255, 0.5);
+	
 	overflow: hidden;
 	z-index: 1;
 }
@@ -136,18 +135,16 @@ body.debug {
 
 	opacity: 1;
 	transition: all 0.5s;
-	-webkit-transform: translateZ(0);
-	transform: translateZ(0);
 }
 
 .mtsui.window .mtsui.page.transition.slide.hide.left {
-	left: -110%;
-	right: 110%;
+	transform: translate3d(-100%, 0, 0);
+	-webkit-transform: translate3d(-100%, 0, 0);
 	opacity: 0;
 }
 .mtsui.window .mtsui.page.transition.slide.right {
-	left: 110%;
-	right: -110%;
+	-webkit-transform: translate3d(100%, 0, 0);
+	transform: translate3d(100%, 0, 0);
 	opacity: 0;
 }
 .mtsui.window.fullscreen .mtsui.page.transition.slide.in .mtsui.header {
@@ -160,7 +157,7 @@ body.debug {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	width: 80%;
+	width: 280px;
 	height: 100%;
 	left: auto;
 	right: auto;
@@ -172,28 +169,29 @@ body.debug {
 }
 
 .mtsui.window .mtsui.menu.page.right {
-	right: -80%;
+	right: -280px;
 }
 .mtsui.window .mtsui.page.right.hide {
-	right: 80%;
-	left: -80%;
+	-webkit-transform: translate3d(-280px, 0, 0);
+	transform: translate3d(-280px, 0, 0);
 }
-
 
 .mtsui.window .mtsui.menu.page.left {
-	left: -80%;
+	left: -280px;
 }
 .mtsui.window .mtsui.page.left.hide {
-	left: 80%;
-	right: -80%;
+	-webkit-transform: translate3d(280px, 0, 0);
+	transform: translate3d(280px, 0, 0);
 }
 
 .mtsui.window .mtsui.menu.page.right.show {
-	right: 0;
+	-webkit-transform: translate3d(-280px, 0, 0);
+	transform: translate3d(-280px, 0, 0);
 }
 
 .mtsui.window .mtsui.menu.page.left.show {
-	left: 0;
+	-webkit-transform: translate3d(280px, 0, 0);
+	transform: translate3d(280px, 0, 0);
 }
 
 /* Page Header */
@@ -239,9 +237,7 @@ body.debug {
 }
 
 /* Page Content */
-.mtsui.window .mtsui.page .mtsui.content {
-	margin: 5px;
-	
+.mtsui.window .mtsui.page .mtsui.content {	
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -287,4 +283,8 @@ body.debug {
 	text-align: right;
 	margin-right: 5px;
 	font-size: 18px;
+}
+
+.mtsui.list .mtsui.listitem tr td:last-child {
+	width: 25px;
 }
