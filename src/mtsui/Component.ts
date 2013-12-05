@@ -4,12 +4,10 @@
 
 module mtsui {
     export class Component extends tsc.ui.View {
-        private components: tsc.util.List<Component>;
         private dom: HTMLElement;
 
         constructor(template: any) {
             super(template);
-            this.components = new tsc.util.LinkedList<Component>();
 
             this.dom = document.createElement("div");
             this.dom.setAttribute("class", "mtsui component");
@@ -21,6 +19,10 @@ module mtsui {
 
         public remove(component: Component): void {
             super.getDom().removeChild(component.getDom());
+        }
+        
+        public clear(): void {
+            super.getDom().innerHTML = "";
         }
 
         public getDom(): HTMLElement {

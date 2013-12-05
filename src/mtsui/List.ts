@@ -75,5 +75,9 @@ module mtsui {
         public remove(listItem: ListItem) : void {
             super.remove(listItem);
         }
+        
+        public clear(): void {
+            super.clear();
+        }
     }
 }
