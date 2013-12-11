@@ -59,10 +59,8 @@ module mtsui {
                         style.transform = "translate3d("+(e.pageX-width)+"px, 0, 0)";
                     }
                     
+                    e.preventDefault();
                 }
-                e.preventDefault();
-                if(global_window.event) global_window.event.cancelBubble = true;
-                e.stopPropagation();
             }, false);
             
             window.getDom().addEventListener('touchend', function(in_e){
