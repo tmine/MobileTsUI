@@ -36,8 +36,6 @@ module mtsui {
                 var style: any = page.getDom().style;
                 
                 width = width || window.getDom().scrollWidth;
-                console.log("width: " + width);
-                console.log("lastPos: " + lastPos);
                 
                 var e = <TouchEvent> in_e;
                 if((draging && direction == position) || (position == "left" && e.pageX <= 40) || (position == "right" && e.pageX >= (width-40))){
