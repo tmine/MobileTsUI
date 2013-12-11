@@ -25,8 +25,6 @@ module mtsui {
             this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
             
-            var page = this.window.getActualPage();
-            var style: any = page.getDom().style;
             var _this = this;
             var draging = false;
             var direction = "";
@@ -34,8 +32,13 @@ module mtsui {
             var visible = false;
             var width = 0;
             window.getDom().addEventListener('touchmove', function(in_e){
+                var page = _this.window.getActualPage();
+                var style: any = page.getDom().style;
+                
                 width = width || window.getDom().scrollWidth;
-                                
+                console.log("width: " + width);
+                console.log("lastPos: " + lastPos);
+                
                 var e = <TouchEvent> in_e;
                 if((draging && direction == position) || (position == "left" && e.pageX <= 40) || (position == "right" && e.pageX >= (width-40))){
                     if(position == "left") direction = "left";
@@ -64,6 +67,9 @@ module mtsui {
             }, false);
             
             window.getDom().addEventListener('touchend', function(in_e){
+                var page = _this.window.getActualPage();
+                var style: any = page.getDom().style;
+                
                 if(draging && direction == "right" && lastPos >= (width/2)){
                     _this.hide();
                 } else if(draging && direction == "left" && lastPos <= (width/2)){
@@ -102,8 +108,6 @@ module mtsui {
             var overlay = document.createElement("div");
             overlay.setAttribute("class", "mtsui page");
             
-            var page = this.window.getActualPage();
-            var style: any = page.getDom().style;
             var _this = this;
             var draging = false;
             var direction = "";
@@ -111,6 +115,9 @@ module mtsui {
             var visible = false;
             var width = 0;
             overlay.addEventListener('touchmove', function(in_e){
+                var page = _this.window.getActualPage();
+                var style: any = page.getDom().style;
+                
                 width = width || overlay.scrollWidth;
                                 
                 var e = <TouchEvent> in_e;
@@ -141,7 +148,10 @@ module mtsui {
                 e.stopPropagation();
             }, false);
             
-            overlay.addEventListener('touchend', function(in_e){                
+            overlay.addEventListener('touchend', function(in_e){
+                var page = _this.window.getActualPage();
+                var style: any = page.getDom().style;
+                
                 if(draging && direction == "right" && lastPos >= (width/2)){
                     _this.hide();
                 } else if(draging && direction == "left" && lastPos <= (width/2)){
