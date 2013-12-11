@@ -190,7 +190,8 @@ module mtsui {
         public hide(): void {            
             var page = this.window.getActualPage();
             
-            this.window.getDom().removeChild(this.window.getDom().querySelector(".menuoverlay"));
+            var overlay = this.window.getDom().querySelector(".menuoverlay");
+            if(overlay) this.window.getDom().removeChild(overlay);
             
             if (page.getDom().className.indexOf(" hide " + this.position) != -1) page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");
             

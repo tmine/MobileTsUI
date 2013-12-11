@@ -4,21 +4,30 @@
 module mtsui {    
     export class Button extends Component {
         private icon: HTMLElement;
+        private input: HTMLElement;
         
         constructor(value: String, click_cb?: Function) {
-            var input: HTMLElement = document.createElement("button");
-            input.setAttribute("class", "mtsui button");
+            this.input = document.createElement("button");
+            this.input.setAttribute("class", "mtsui button");
             
             var text: HTMLElement = document.createElement("span");
             text.appendChild(document.createTextNode("" + value));
             
-            input.appendChild(text);
+            this.input.appendChild(text);
             
-            input.onclick = function(){
+            this.input.onclick = function(){
                 if(click_cb) click_cb();
             }
             
-            super(input);
+            super(this.input);
+        }
+        
+        public disable(): void {
+            this.input.disabled = true;
+        }
+        
+        public enable(): void {
+            this.input.disabled = false;
         }
         
         public addIcon(icon_comp?: Icon, pos?: String): void {
