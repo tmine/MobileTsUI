@@ -25,6 +25,12 @@ module mtsui {
             this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
             
+            this.menu.addEventListener('touchmove', function(in_e){
+                var e = <TouchEvent> in_e;
+                if(global_window.event) global_window.event.cancelBubble = true;
+                e.stopPropagation();
+            }, false);
+            
             var _this = this;
             var draging = false;
             var direction = "";
