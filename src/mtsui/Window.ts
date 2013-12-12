@@ -35,9 +35,7 @@ module mtsui {
             WindowManager.closeWindow(this);
         }
 
-        public navigateTo(page: Page, transitiontype?: String): void {
-            if(page.getDom().parentNode) return this.back();
-            
+        public navigateTo(page: Page, transitiontype?: String): void {            
             if(!transitiontype) transitiontype = "slide";
             
             var oldPage: Page = this.pageStack.peek();

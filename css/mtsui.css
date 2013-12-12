@@ -101,7 +101,10 @@ body.debug {
 
 .mtsui.window.modal {
 	background: transparent;
-	z-index: 0;
+	z-index: 100;
+}
+.mtsui.window.modal > .mtsui.page {
+	display: none;
 }
 
 .mtsui.window.modal .mtsui.window {
@@ -248,6 +251,10 @@ body.debug {
 	
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
+}
+
+.mtsui.window .mtsui.page .mtsui.header + .mtsui.content {
+	top: 40px; /* Header height */
 }
 
 /* Button */

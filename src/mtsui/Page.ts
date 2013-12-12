@@ -11,7 +11,7 @@ module mtsui {
         private body: Component;
         private div: HTMLElement;
 
-        constructor(window: Window, title?: String) {
+        constructor(window: mtsui.Window, title?: String) {
             this.window = window;
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtsui page");
@@ -27,7 +27,7 @@ module mtsui {
             this.title = title;
             if(this.title){
                 this.header = new Header();
-                this.div.appendChild(this.header.getDom());
+                super.getDom().insertBefore(this.header.getDom(), super.getDom().firstChild);
                 
                 var node = document.createElement("h1");
                 var title: String = this.title || "";
@@ -35,13 +35,6 @@ module mtsui {
                 node.appendChild(titleNode);
     
                 this.header.setMiddle(new Component(node));
-                
-                var content: HTMLElement = <HTMLElement> super.getDom().firstChild;
-                var header = this.header;
-                /* wait for relayout to get the calculated scrollHeight */
-                setTimeout(function(){
-                    content.style.top = header.getDom().scrollHeight + "px";
-                }, 0);
             }
         }
 
@@ -57,14 +50,8 @@ module mtsui {
             if(this.header && this.header.getMiddle().getDom().innerHTML != "<span></span>" && header.getMiddle().getDom().innerHTML == "<span></span>") header.setMiddle(this.header.getMiddle());
             if(this.header && this.header.getRight().getDom().innerHTML != "<span></span>" && header.getRight().getDom().innerHTML == "<span></span>") header.setRight(this.header.getRight()); 
             
-            this.div.appendChild(header.getDom());
+            super.getDom().insertBefore(header.getDom(), super.getDom().firstChild);
             this.header = header;
-            
-            var content: HTMLElement = <HTMLElement> super.getDom().firstChild;
-            /* wait for relayout to get the calculated scrollHeight */
-            setTimeout(function(){
-                content.style.top = header.getDom().scrollHeight + "px";
-            }, 0);
         }
         
         public getHeader(): Header{
