@@ -12,6 +12,8 @@ var global_window = window;
 
 module mtsui {
     export class Menu {
+        private static OFFSET: number = 50;
+        
         private visible: boolean;
         private menu: HTMLElement;
         private window: Window;
@@ -44,7 +46,7 @@ module mtsui {
                 width = width || window.getDom().scrollWidth;
                 
                 var e = <TouchEvent> in_e;
-                if((draging && direction == position) || (position == "left" && e.pageX <= 40) || (position == "right" && e.pageX >= (width-40))){
+                if((draging && direction == position) || (position == "left" && e.pageX <= Menu.OFFSET) || (position == "right" && e.pageX >= (width-Menu.OFFSET))){
                     if(position == "left") direction = "left";
                     if(position == "right") direction = "right";
                     if(!draging){
@@ -125,7 +127,7 @@ module mtsui {
                 width = width || overlay.scrollWidth;
                                 
                 var e = <TouchEvent> in_e;
-                if((draging && direction == _this.position) || (_this.position == "right" && e.pageX <= 40) || (_this.position == "left" && e.pageX >= (width-40))){
+                if((draging && direction == _this.position) || (_this.position == "right" && e.pageX <= Menu.OFFSET) || (_this.position == "left" && e.pageX >= (width-Menu.OFFSET))){
                     if(_this.position == "left") direction = "left";
                     if(_this.position == "right") direction = "right";
                     if(!draging){
