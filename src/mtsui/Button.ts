@@ -22,6 +22,10 @@ module mtsui {
             super(this.input);
         }
         
+        public setType(type: string): void{
+            this.input.setAttribute("type", type);
+        }
+        
         public disable(): void {
             this.input.disabled = true;
         }
