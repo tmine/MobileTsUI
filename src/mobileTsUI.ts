@@ -1,4 +1,3 @@
-
 /// <reference path="mtsui/Window.ts"/>
 /// <reference path="mtsui/WindowManager.ts"/>
 /// <reference path="mtsui/Page.ts"/>
