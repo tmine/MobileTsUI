@@ -293,6 +293,6 @@ body.debug {
 	font-size: 18px;
 }
 
-.mtsui.list .mtsui.listitem tr td:last-child {
+.mtsui.list .mtsui.listitem > tr > td:last-child {
 	width: 25px;
 }
