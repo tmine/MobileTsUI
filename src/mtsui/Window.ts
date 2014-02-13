@@ -28,12 +28,20 @@ module mtsui {
         public deleteStack(): void{
             while(this.pageStack.size() > 0){
                 var page: Page = this.pageStack.pop();
-                if(page) this.getDom().removeChild(page.getDom());
+                if(page){
+                    page.deinit();
+                    this.getDom().removeChild(page.getDom());
+                } 
             }
         }
         
         public close(): void{
             WindowManager.closeWindow(this);
+        }
+        
+        public deinit(): void{
+            this.deleteStack();
+            super.deinit();
         }
 
         public navigateTo(page: Page, transitiontype?: String): void {            

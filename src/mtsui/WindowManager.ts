@@ -45,6 +45,7 @@ module mtsui {
 
         public static closeWindow(window: Window): void{
             // Remove window from body
+            window.deinit();
             document.body.removeChild(window.getDom());
             
             if(window == WindowManager.windowStack.peek()){
@@ -57,6 +58,7 @@ module mtsui {
         public static close(): void {
             var window: Window = WindowManager.windowStack.pop();
             // Remove window from body
+            window.deinit();
             document.body.removeChild(window.getDom());
 
             var window: Window = WindowManager.windowStack.peek();

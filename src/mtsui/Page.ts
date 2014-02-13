@@ -37,7 +37,7 @@ module mtsui {
                 this.header.setMiddle(new Component(node));
             }
         }
-
+        
         public getWindow(): Window{
             return this.window;
         }

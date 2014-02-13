@@ -96,6 +96,10 @@ module mtsui {
             }
 		}
         
+        public deinit(): void {
+            
+        }
+        
         public addTo(header: Header, icon: Component): void{
             this.window.getDom().appendChild(this.menu);
             
