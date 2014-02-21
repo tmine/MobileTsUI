@@ -1,5 +1,4 @@
-/// <reference path="../libts/util/Stack.ts"/>
-/// <reference path="../libts/ui/View.ts"/>
+/// <reference path="../libts.d.ts"/>
 /// <reference path="Page.ts"/>
 /// <reference path="WindowManager.ts"/>
 

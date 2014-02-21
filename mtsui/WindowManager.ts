@@ -1,4 +1,4 @@
-/// <reference path="../libts/util/Stack.ts"/>
+/// <reference path="../libts.d.ts"/>
 /// <reference path="Window.ts"/>
 
 module mtsui {

@@ -1,6 +1,4 @@
-/// <reference path="../libts/util/List.ts"/>
-/// <reference path="../libts/util/LinkedList.ts"/>
-/// <reference path="../libts/ui/View.ts"/>
+/// <reference path="../libts.d.ts"/>
 
 module mtsui {
     export class Component extends ts.ui.View {

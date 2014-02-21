@@ -1,8 +1,7 @@
 MobileTsUI
 ===========
 
-Typescript Mobile UI Lib
+Mobile Typescript UI
 
 
-This Project depends on my other Project (tscLibrary), please make sure you checkt out tscLibrary in folder libs.
-(there's a Link: src/tsc -> ../libs/tscLibrary/tsc)
+This Project depends on libts (https://github.com/tmine/libts), please make sure you include its libts.js file!
