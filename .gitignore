@@ -1,6 +1,6 @@
-libs
 .settings
 .project
+.externalToolBuilders
 eclipseBuilder.sh
 *.launch
 

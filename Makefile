@@ -1,7 +1,7 @@
 
-all: compileTS
+all: tsc
 
-compileTS:
-	tsc src/mobileTsUI.ts -out js/mtsui.js
+tsc:
+	tsc mtsui/*.ts -out mtsui.js -d
 
-.PHONY: compileTS
+.PHONY: tsc
