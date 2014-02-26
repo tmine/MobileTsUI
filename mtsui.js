@@ -553,7 +553,7 @@ var mtsui;
             if (position && position === "right")
                 _super.prototype.getDom.call(this).firstChild.firstChild.appendChild(icon);
             if (position && position === "left")
-                _super.prototype.getDom.call(this).firstChild.firstChild.insertBefore(icon, _super.prototype.getDom.call(this).firstChild.firstChild);
+                _super.prototype.getDom.call(this).firstChild.firstChild.insertBefore(icon, _super.prototype.getDom.call(this).firstChild.firstChild.firstChild);
             else
                 _super.prototype.getDom.call(this).firstChild.firstChild.appendChild(icon);
         }

@@ -55,7 +55,7 @@ module mtsui {
             icon.appendChild(compdom);
             
             if(position && position === "right") super.getDom().firstChild.firstChild.appendChild(icon);
-            if(position && position === "left") super.getDom().firstChild.firstChild.insertBefore(icon, super.getDom().firstChild.firstChild);
+            if(position && position === "left") super.getDom().firstChild.firstChild.insertBefore(icon, super.getDom().firstChild.firstChild.firstChild);
             else super.getDom().firstChild.firstChild.appendChild(icon);
         }
     }
