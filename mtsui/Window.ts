@@ -24,6 +24,13 @@ module mtsui {
             return page;
         }
 
+        public setActualPage(page: Page): void {
+            var oldPage = this.pageStack.pop();
+            this.pageStack.push(page);
+
+            this.getDom().replaceChild(page.getDom(), oldPage.getDom());
+        }
+
         public deleteStack(): void{
             while(this.pageStack.size() > 0){
                 var page: Page = this.pageStack.pop();
@@ -67,6 +74,8 @@ module mtsui {
         public back(): void {
             var oldPage: Page = this.pageStack.pop();
             var page: Page = this.pageStack.peek();
+
+            page.beforeDisplay();
 
             oldPage.getDom().className += " transition slide hide right";
 

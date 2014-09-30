@@ -153,6 +153,9 @@ var mtsui;
                 this.header.setMiddle(new mtsui.Component(node));
             }
         }
+        Page.prototype.beforeDisplay = function () {
+        };
+
         Page.prototype.getWindow = function () {
             return this.window;
         };
@@ -285,6 +288,13 @@ var mtsui;
             return page;
         };
 
+        Window.prototype.setActualPage = function (page) {
+            var oldPage = this.pageStack.pop();
+            this.pageStack.push(page);
+
+            this.getDom().replaceChild(page.getDom(), oldPage.getDom());
+        };
+
         Window.prototype.deleteStack = function () {
             while (this.pageStack.size() > 0) {
                 var page = this.pageStack.pop();
@@ -330,6 +340,8 @@ var mtsui;
         Window.prototype.back = function () {
             var oldPage = this.pageStack.pop();
             var page = this.pageStack.peek();
+
+            page.beforeDisplay();
 
             oldPage.getDom().className += " transition slide hide right";
 
