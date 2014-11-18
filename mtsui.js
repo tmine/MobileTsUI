@@ -493,16 +493,6 @@ var mtsui;
             }
             _super.call(this, this.list);
         }
-        List.prototype.add = function (listItem) {
-            _super.prototype.add.call(this, listItem);
-        };
-        List.prototype.remove = function (listItem) {
-            _super.prototype.remove.call(this, listItem);
-        };
-        List.prototype.clear = function () {
-            _super.prototype.clear.call(this);
-        };
-        List.OFFSET = 50;
         return List;
     })(mtsui.Component);
     mtsui.List = List;
@@ -515,7 +505,7 @@ var mtsui;
             this.color = color;
         }
         ListSwipeDecorator.prototype.add = function (listItem, deleteCallback) {
-            _super.prototype.add.call(this, listItem);
+            this.value.add(listItem);
             var style = listItem.getDom().style;
             style.position = "relative";
             var button = document.createElement("div");
@@ -575,6 +565,12 @@ var mtsui;
                 style.webkitTransform = "translate3d(" + newPos + "px, 0, 0)";
                 style.transform = "translate3d(" + newPos + "px, 0, 0)";
             }, false);
+        };
+        ListSwipeDecorator.prototype.remove = function (listItem) {
+            this.value.remove(listItem);
+        };
+        ListSwipeDecorator.prototype.clear = function () {
+            this.value.clear();
         };
         ListSwipeDecorator.ELEMENT_SIZE = 80;
         return ListSwipeDecorator;

@@ -67,8 +67,6 @@ module mtsui {
     }
 
     export class List extends Component {
-        private static OFFSET: number = 50;
-
         private list: HTMLElement;
 
         constructor(value?){
@@ -81,18 +79,6 @@ module mtsui {
 
             super(this.list);
         }
-
-        public add(listItem: ListItem): void{
-            super.add(listItem);
-        }
-
-        public remove(listItem: ListItem): void{
-            super.remove(listItem);
-        }
-
-        public clear(): void{
-            super.clear();
-        }
     }
 
     export class ListSwipeDecorator extends List {
@@ -102,8 +88,8 @@ module mtsui {
             super(value);
         }
 
-        public add(listItem: ListItem, deleteCallback?: Function): void{
-            super.add(listItem);
+        public add(listItem: Component, deleteCallback?: Function): void{
+            this.value.add(listItem);
 
             var style = listItem.getDom().style;
             style.position = "relative";
@@ -129,7 +115,8 @@ module mtsui {
             var startPos = 0;
             var firstPos = 0;
             var state = "hidden";
-            listItem.getItem().addEventListener('touchmove', function(in_e){
+
+            (<ListItem>listItem).getItem().addEventListener('touchmove', function(in_e){
                 var e = <TouchEvent> in_e;
                 if(startPos == 0) startPos = e.pageX;
                 var newPos = e.pageX - startPos;
@@ -142,7 +129,7 @@ module mtsui {
                 e.preventDefault();
             }, false);
 
-            listItem.getItem().addEventListener('touchend', function(in_e){
+            (<ListItem>listItem).getItem().addEventListener('touchend', function(in_e){
                 var e = <TouchEvent> in_e;
                 var newPos = e.pageX - startPos;
 
@@ -167,6 +154,14 @@ module mtsui {
                 style.webkitTransform = "translate3d(" + newPos + "px, 0, 0)";
                 style.transform = "translate3d(" + newPos + "px, 0, 0)";
             }, false);
+        }
+
+        public remove(listItem: Component): void{
+            this.value.remove(listItem);
+        }
+
+        public clear(): void{
+            this.value.clear();
         }
     }
 }

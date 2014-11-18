@@ -101,12 +101,8 @@ declare module mtsui {
         constructor(comp: Component, value?: any, position?: String);
     }
     class List extends Component {
-        private static OFFSET;
         private list;
         constructor(value?: any);
-        add(listItem: ListItem): void;
-        remove(listItem: ListItem): void;
-        clear(): void;
     }
     class ListSwipeDecorator extends List {
         private value;
@@ -114,7 +110,9 @@ declare module mtsui {
         private color;
         private static ELEMENT_SIZE;
         constructor(value: List, deleteIcon: Icon, color: String);
-        add(listItem: ListItem, deleteCallback?: Function): void;
+        add(listItem: Component, deleteCallback?: Function): void;
+        remove(listItem: Component): void;
+        clear(): void;
     }
 }
 interface TouchEvent extends Event {
