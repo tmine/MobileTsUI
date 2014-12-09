@@ -129,6 +129,8 @@ var mtsui;
         }
         Page.prototype.beforeDisplay = function () {
         };
+        Page.prototype.beforeHide = function () {
+        };
         Page.prototype.getWindow = function () {
             return this.window;
         };
@@ -173,6 +175,9 @@ var mtsui;
             // Append new window to body
             document.body.appendChild(window.getDom());
         };
+        WindowManager.getActiveWindow = function () {
+            return this.windowStack.peek();
+        };
         WindowManager.openFullscreen = function (window) {
             window.getDom().className += " fullscreen";
             WindowManager.open(window);
@@ -195,15 +200,18 @@ var mtsui;
             WindowManager.open(temp);
         };
         WindowManager.closeWindow = function (window) {
-            // Remove window from body
-            window.deinit();
-            document.body.removeChild(window.getDom());
             if (window == WindowManager.windowStack.peek()) {
-                WindowManager.windowStack.pop();
-                var window = WindowManager.windowStack.peek();
-                if (window)
-                    window.getDom().className = window.getDom().className.replace(" hide", "");
+                this.close();
             }
+            else {
+                var windowStackArray = this.windowStack.toArray();
+                this.windowStack = new ts.util.Stack(windowStackArray.splice(windowStackArray.indexOf(window, 1)));
+                // Remove window from body
+                window.deinit();
+                document.body.removeChild(window.getDom());
+            }
+            if (this.windowStack.empty())
+                history.back();
         };
         WindowManager.close = function () {
             var window = WindowManager.windowStack.pop();
@@ -279,18 +287,22 @@ var mtsui;
         Window.prototype.back = function () {
             var oldPage = this.pageStack.pop();
             var page = this.pageStack.peek();
-            page.beforeDisplay();
+            if (page) {
+                page.beforeDisplay();
+                var superdom = this.getDom();
+                setTimeout(function () {
+                    page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
+                }, 0);
+            }
             oldPage.getDom().className += " transition slide hide right";
-            var superdom = this.getDom();
-            setTimeout(function () {
-                page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
-            }, 0);
             setTimeout(function () {
                 oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
                 if (oldPage.getDom().parentNode == superdom)
                     superdom.removeChild(oldPage.getDom());
                 page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
             }, 1000);
+            if (this.pageStack.empty())
+                this.close();
         };
         return Window;
     })(ts.ui.View);
@@ -519,7 +531,7 @@ var mtsui;
             button.style.paddingTop = "6%";
             button.style.color = "white";
             button.style.fontSize = "1.8em";
-            button.appendChild(this.deleteIcon.getDom());
+            button.appendChild(this.deleteIcon.getDom().cloneNode(true));
             button.onclick = function (e) {
                 deleteCallback();
             };

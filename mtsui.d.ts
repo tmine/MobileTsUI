@@ -32,6 +32,7 @@ declare module mtsui {
         private div;
         constructor(window: Window, title?: String);
         beforeDisplay(): void;
+        beforeHide(): void;
         getWindow(): Window;
         addHeader(header: Header): void;
         getHeader(): Header;
@@ -42,6 +43,7 @@ declare module mtsui {
     class WindowManager {
         private static windowStack;
         private static open(window);
+        static getActiveWindow(): Window;
         static openFullscreen(window: Window): void;
         static openModal(window: Window, closable: boolean): void;
         static closeWindow(window: Window): void;
@@ -131,7 +133,7 @@ declare module mtsui {
         constructor(window: Window, content: Component, position: string, slide?: boolean);
         deinit(): void;
         addTo(header: Header, icon: Component): void;
-        private toggle();
+        toggle(): void;
         show(): void;
         hide(): void;
     }

@@ -18,6 +18,10 @@ module mtsui {
             document.body.appendChild(window.getDom());
         }
 
+        public static getActiveWindow(): mtsui.Window {
+            return this.windowStack.peek();
+        }
+
         public static openFullscreen(window: Window) {
             window.getDom().className += " fullscreen";
             WindowManager.open(window);
@@ -44,17 +48,19 @@ module mtsui {
         }
 
         public static closeWindow(window: Window): void{
-            // Remove window from body
-            window.deinit();
-            document.body.removeChild(window.getDom());
-            
             if(window == WindowManager.windowStack.peek()){
-                WindowManager.windowStack.pop();
-                var window: Window = WindowManager.windowStack.peek();
-                if(window) window.getDom().className = window.getDom().className.replace(" hide", "");
+                this.close();
+            } else {
+                var windowStackArray = this.windowStack.toArray();
+                this.windowStack = new ts.util.Stack<Window>(windowStackArray.splice(windowStackArray.indexOf(window, 1)));
+                // Remove window from body
+                window.deinit();
+                document.body.removeChild(window.getDom());
             }
+
+            if(this.windowStack.empty()) history.back();
         }
-        
+
         public static close(): void {
             var window: Window = WindowManager.windowStack.pop();
             // Remove window from body

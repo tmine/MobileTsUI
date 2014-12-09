@@ -105,7 +105,7 @@ module mtsui {
             button.style.paddingTop = "6%";
             button.style.color = "white";
             button.style.fontSize = "1.8em";
-            button.appendChild(this.deleteIcon.getDom());
+            button.appendChild(this.deleteIcon.getDom().cloneNode(true));
             button.onclick = function(e){
                 deleteCallback();
             };

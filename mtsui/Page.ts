@@ -40,6 +40,9 @@ module mtsui {
 
         public beforeDisplay(): void{
         }
+
+        public beforeHide(): void {
+        }
         
         public getWindow(): Window{
             return this.window;

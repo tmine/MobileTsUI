@@ -112,7 +112,7 @@ module mtsui {
             }
         }
 
-        private toggle(): void {
+        public toggle(): void {
             if (this.visible) this.hide();
             else this.show();
         }

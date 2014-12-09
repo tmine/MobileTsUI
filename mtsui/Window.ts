@@ -75,21 +75,23 @@ module mtsui {
             var oldPage: Page = this.pageStack.pop();
             var page: Page = this.pageStack.peek();
 
-            page.beforeDisplay();
+            if(page) {
+                page.beforeDisplay();
+                var superdom = this.getDom();
+                setTimeout(function(){
+                    page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
+                }, 0);
+            }
 
             oldPage.getDom().className += " transition slide hide right";
-
-            var superdom = this.getDom();
-            setTimeout(function() {
-                page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
-            }, 0);
-
             setTimeout(function() {
                 oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
                 if(oldPage.getDom().parentNode == superdom) superdom.removeChild(oldPage.getDom());
                 
                 page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
             }, 1000);
+
+            if(this.pageStack.empty()) this.close();
         }
 
     }
