@@ -26,14 +26,12 @@ declare module mtsui {
 declare module mtsui {
     class Page extends Component {
         private title;
-        private window;
         private header;
         private body;
         private div;
-        constructor(window: Window, title?: String);
+        constructor(title?: String);
         beforeDisplay(): void;
         beforeHide(): void;
-        getWindow(): Window;
         addHeader(header: Header): void;
         getHeader(): Header;
         getDom(): HTMLElement;

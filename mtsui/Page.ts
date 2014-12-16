@@ -6,13 +6,11 @@
 module mtsui {
     export class Page extends Component {
         private title: String;
-        private window: Window;
         private header: Header;
         private body: Component;
         private div: HTMLElement;
 
-        constructor(window: mtsui.Window, title?: String) {
-            this.window = window;
+        constructor(title?: String) {
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtsui page");
             
@@ -22,8 +20,8 @@ module mtsui {
             super(body);
 
             this.div.appendChild(super.getDom());
-            
-            
+
+
             this.title = title;
             if(this.title){
                 this.header = new Header();
@@ -42,10 +40,6 @@ module mtsui {
         }
 
         public beforeHide(): void {
-        }
-        
-        public getWindow(): Window{
-            return this.window;
         }
         
         public addHeader(header: Header): void{

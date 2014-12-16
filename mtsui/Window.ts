@@ -13,7 +13,7 @@ module mtsui {
             instance.setAttribute("class", "mtsui window");
             super(instance);
 
-            var page: Page = new Page(this, title);
+            var page: Page = new Page(title);
             instance.appendChild(page.getDom());
             this.pageStack.push(page);
         }

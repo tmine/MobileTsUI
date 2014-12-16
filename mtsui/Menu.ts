@@ -28,7 +28,8 @@ module mtsui {
             this.menu = document.createElement("div");
             this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
-            
+
+            // TODO: create gesture for slide in
             if(this.slide){
                 this.menu.addEventListener('touchmove', function(in_e){
                     var e = <TouchEvent> in_e;

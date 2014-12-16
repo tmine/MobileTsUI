@@ -108,8 +108,7 @@ var mtsui;
 (function (mtsui) {
     var Page = (function (_super) {
         __extends(Page, _super);
-        function Page(window, title) {
-            this.window = window;
+        function Page(title) {
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtsui page");
             var body = document.createElement("div");
@@ -130,9 +129,6 @@ var mtsui;
         Page.prototype.beforeDisplay = function () {
         };
         Page.prototype.beforeHide = function () {
-        };
-        Page.prototype.getWindow = function () {
-            return this.window;
         };
         Page.prototype.addHeader = function (header) {
             if (this.header)
@@ -239,7 +235,7 @@ var mtsui;
             var instance = document.createElement("div");
             instance.setAttribute("class", "mtsui window");
             _super.call(this, instance);
-            var page = new mtsui.Page(this, title);
+            var page = new mtsui.Page(title);
             instance.appendChild(page.getDom());
             this.pageStack.push(page);
         }
