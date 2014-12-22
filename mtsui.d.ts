@@ -34,7 +34,12 @@ declare module mtsui {
         beforeHide(): void;
         addHeader(header: Header): void;
         getHeader(): Header;
+        getContent(): HTMLElement;
         getDom(): HTMLElement;
+    }
+    class RefreshablePage extends Page {
+        constructor(icon: Icon, color: String, text: String, title?: String);
+        onRefresh(func: Function): void;
     }
 }
 declare module mtsui {

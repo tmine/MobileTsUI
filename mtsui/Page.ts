@@ -4,20 +4,21 @@
 /// <reference path="Window.ts"/>
 
 module mtsui {
+
     export class Page extends Component {
         private title: String;
         private header: Header;
-        private body: Component;
+        private body: HTMLElement;
         private div: HTMLElement;
 
         constructor(title?: String) {
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtsui page");
             
-            var body: HTMLElement = document.createElement("div");
-            body.setAttribute("class", "mtsui content");
+            this.body = document.createElement("div");
+            this.body.setAttribute("class", "mtsui content");
 
-            super(body);
+            super(this.body);
 
             this.div.appendChild(super.getDom());
 
@@ -58,9 +59,54 @@ module mtsui {
             return this.header;
         }
 
+        public getContent(): HTMLElement {
+            return this.body;
+        }
+
         public getDom(): HTMLElement {
             return this.div;
         }
 
+    }
+
+    export class RefreshablePage extends Page {
+
+        constructor(icon: Icon, color: String, text: String, title?: String){
+            super(title);
+
+            var refresh = document.createElement("div");
+            refresh.textContent = text.toString();
+            refresh.style.position = "relative";
+            refresh.style.height = "0";
+            refresh.style.top = "-25px";
+            refresh.style.padding = "0";
+            refresh.style.textAlign = "center";
+            refresh.style.color = color.toString();
+
+            var _this = this;
+            var content = this.getContent();
+            content.addEventListener("touchend", function(){
+                if(content.scrollTop < -50) {
+                    refresh.style.position = "static";
+                    refresh.style.height = "40px";
+                    refresh.style.top = "0";
+                    refresh.style.padding = "0.5em";
+                    refresh.insertBefore(icon.getDom(), refresh.firstChild);
+
+                    _this.onRefresh(function(){
+                        refresh.style.position = "relative";
+                        refresh.style.height = "0";
+                        refresh.style.top = "-25px";
+                        refresh.style.padding = "0";
+                        refresh.removeChild(icon.getDom());
+                    });
+                }
+            });
+
+            content.insertBefore(refresh, content.firstChild);
+        }
+
+        public onRefresh(func: Function): void {
+        }
     }
 }

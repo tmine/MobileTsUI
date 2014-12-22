@@ -111,9 +111,9 @@ var mtsui;
         function Page(title) {
             this.div = document.createElement("div");
             this.div.setAttribute("class", "mtsui page");
-            var body = document.createElement("div");
-            body.setAttribute("class", "mtsui content");
-            _super.call(this, body);
+            this.body = document.createElement("div");
+            this.body.setAttribute("class", "mtsui content");
+            _super.call(this, this.body);
             this.div.appendChild(_super.prototype.getDom.call(this));
             this.title = title;
             if (this.title) {
@@ -146,12 +146,52 @@ var mtsui;
         Page.prototype.getHeader = function () {
             return this.header;
         };
+        Page.prototype.getContent = function () {
+            return this.body;
+        };
         Page.prototype.getDom = function () {
             return this.div;
         };
         return Page;
     })(mtsui.Component);
     mtsui.Page = Page;
+    var RefreshablePage = (function (_super) {
+        __extends(RefreshablePage, _super);
+        function RefreshablePage(icon, color, text, title) {
+            _super.call(this, title);
+            var refresh = document.createElement("div");
+            refresh.textContent = text.toString();
+            refresh.style.position = "relative";
+            refresh.style.height = "0";
+            refresh.style.top = "-25px";
+            refresh.style.padding = "0";
+            refresh.style.textAlign = "center";
+            refresh.style.color = color.toString();
+            var _this = this;
+            var content = this.getContent();
+            content.addEventListener("touchend", function () {
+                if (content.scrollTop < -50) {
+                    refresh.style.position = "static";
+                    refresh.style.height = "40px";
+                    refresh.style.top = "0";
+                    refresh.style.padding = "0.5em";
+                    refresh.insertBefore(icon.getDom(), refresh.firstChild);
+                    _this.onRefresh(function () {
+                        refresh.style.position = "relative";
+                        refresh.style.height = "0";
+                        refresh.style.top = "-25px";
+                        refresh.style.padding = "0";
+                        refresh.removeChild(icon.getDom());
+                    });
+                }
+            });
+            content.insertBefore(refresh, content.firstChild);
+        }
+        RefreshablePage.prototype.onRefresh = function (func) {
+        };
+        return RefreshablePage;
+    })(Page);
+    mtsui.RefreshablePage = RefreshablePage;
 })(mtsui || (mtsui = {}));
 /// <reference path="../libts.d.ts"/>
 /// <reference path="Window.ts"/>
@@ -600,6 +640,7 @@ var mtsui;
             this.menu = document.createElement("div");
             this.menu.setAttribute("class", "mtsui menu page " + position);
             this.menu.appendChild(content.getDom());
+            // TODO: create gesture for slide in
             if (this.slide) {
                 this.menu.addEventListener('touchmove', function (in_e) {
                     var e = in_e;
