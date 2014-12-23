@@ -32,6 +32,7 @@ declare module mtsui {
         constructor(title?: String);
         beforeDisplay(): void;
         beforeHide(): void;
+        deinit(): void;
         addHeader(header: Header): void;
         getHeader(): Header;
         getContent(): HTMLElement;

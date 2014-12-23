@@ -42,6 +42,10 @@ module mtsui {
 
         public beforeHide(): void {
         }
+
+        public deinit(): void {
+            this.beforeHide();
+        }
         
         public addHeader(header: Header): void{
             if(this.header) this.div.removeChild(this.header.getDom());

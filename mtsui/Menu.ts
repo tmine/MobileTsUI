@@ -98,7 +98,7 @@ module mtsui {
 		}
         
         public deinit(): void {
-            
+            this.window.getDom().removeChild(this.menu);
         }
         
         public addTo(header: Header, icon: Component): void{

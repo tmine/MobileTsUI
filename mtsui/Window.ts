@@ -66,7 +66,10 @@ module mtsui {
                 page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide in", "");
             }, 1000);
 
-            if(oldPage) oldPage.getDom().className += " transition " + transitiontype + " hide left";
+            if(oldPage){
+                oldPage.beforeHide();
+                oldPage.getDom().className += " transition " + transitiontype + " hide left";
+            }
 
             this.pageStack.push(page);
         }
@@ -86,6 +89,7 @@ module mtsui {
             oldPage.getDom().className += " transition slide hide right";
             setTimeout(function() {
                 oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
+                oldPage.deinit();
                 if(oldPage.getDom().parentNode == superdom) superdom.removeChild(oldPage.getDom());
                 
                 page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");

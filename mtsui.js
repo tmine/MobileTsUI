@@ -130,6 +130,9 @@ var mtsui;
         };
         Page.prototype.beforeHide = function () {
         };
+        Page.prototype.deinit = function () {
+            this.beforeHide();
+        };
         Page.prototype.addHeader = function (header) {
             if (this.header)
                 this.div.removeChild(this.header.getDom());
@@ -316,8 +319,10 @@ var mtsui;
             setTimeout(function () {
                 page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide in", "");
             }, 1000);
-            if (oldPage)
+            if (oldPage) {
+                oldPage.beforeHide();
                 oldPage.getDom().className += " transition " + transitiontype + " hide left";
+            }
             this.pageStack.push(page);
         };
         Window.prototype.back = function () {
@@ -333,6 +338,7 @@ var mtsui;
             oldPage.getDom().className += " transition slide hide right";
             setTimeout(function () {
                 oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
+                oldPage.deinit();
                 if (oldPage.getDom().parentNode == superdom)
                     superdom.removeChild(oldPage.getDom());
                 page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
@@ -704,6 +710,7 @@ var mtsui;
             }
         }
         Menu.prototype.deinit = function () {
+            this.window.getDom().removeChild(this.menu);
         };
         Menu.prototype.addTo = function (header, icon) {
             this.window.getDom().appendChild(this.menu);
