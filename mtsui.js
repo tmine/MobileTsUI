@@ -596,8 +596,6 @@ var mtsui;
                 pos = -1 * direction * delta;
                 if (state == "visible")
                     pos = -ListSwipeDecorator.ELEMENT_SIZE + pos;
-                //pos = Math.min(pos, 0);
-                console.log(direction, delta, pos);
                 var style = listItem.getDom().style;
                 style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
                 style.transform = "translate3d(" + (pos) + "px, 0, 0)";

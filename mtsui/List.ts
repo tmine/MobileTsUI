@@ -130,7 +130,6 @@ module mtsui {
                 pos = -1 * direction * delta;
                 if(state == "visible") pos = -ListSwipeDecorator.ELEMENT_SIZE + pos;
 
-                console.log(direction, delta, pos);
                 var style: any = listItem.getDom().style;
                 style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
                 style.transform = "translate3d(" + (pos) + "px, 0, 0)";
