@@ -172,7 +172,7 @@ var mtsui;
             refresh.style.color = color.toString();
             var _this = this;
             var content = this.getContent();
-            content.addEventListener("touchend", function () {
+            content.addEventListener("touchend", function (e) {
                 if (content.scrollTop < -50) {
                     refresh.style.position = "static";
                     refresh.style.height = "40px";
@@ -191,6 +191,7 @@ var mtsui;
             content.insertBefore(refresh, content.firstChild);
         }
         RefreshablePage.prototype.onRefresh = function (func) {
+            func();
         };
         return RefreshablePage;
     })(Page);
@@ -562,6 +563,7 @@ var mtsui;
             this.value.add(listItem);
             var style = listItem.getDom().style;
             style.position = "relative";
+            style.overflow = "visible";
             var button = document.createElement("div");
             button.style.position = "absolute";
             button.style.right = "-" + ListSwipeDecorator.ELEMENT_SIZE + "px";
@@ -579,45 +581,41 @@ var mtsui;
             };
             listItem.getDom().appendChild(button);
             var startPos = 0;
-            var firstPos = 0;
+            var pos = 0;
             var state = "hidden";
             listItem.getItem().addEventListener('touchmove', function (in_e) {
                 var e = in_e;
                 if (startPos == 0)
                     startPos = e.pageX;
-                var newPos = e.pageX - startPos;
+                var delta = startPos - e.pageX; // minus = right, plus = left
+                var direction = delta / Math.abs(delta);
+                if (isNaN(direction))
+                    direction = 0;
+                delta = Math.abs(delta);
+                delta = Math.min(delta, ListSwipeDecorator.ELEMENT_SIZE);
+                pos = -1 * direction * delta;
                 if (state == "visible")
-                    newPos -= ListSwipeDecorator.ELEMENT_SIZE;
+                    pos = -ListSwipeDecorator.ELEMENT_SIZE + pos;
+                //pos = Math.min(pos, 0);
+                console.log(direction, delta, pos);
                 var style = listItem.getDom().style;
-                style.webkitTransform = "translate3d(" + newPos + "px, 0, 0)";
-                style.transform = "translate3d(" + newPos + "px, 0, 0)";
+                style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
+                style.transform = "translate3d(" + (pos) + "px, 0, 0)";
                 e.preventDefault();
             }, false);
             listItem.getItem().addEventListener('touchend', function (in_e) {
-                var e = in_e;
-                var newPos = e.pageX - startPos;
-                if (state == "hidden" && -newPos >= ListSwipeDecorator.ELEMENT_SIZE) {
-                    newPos = -ListSwipeDecorator.ELEMENT_SIZE;
+                if (pos <= -ListSwipeDecorator.ELEMENT_SIZE / 2) {
                     state = "visible";
+                    pos = -ListSwipeDecorator.ELEMENT_SIZE;
                 }
-                else if (state == "visible" && newPos <= ListSwipeDecorator.ELEMENT_SIZE) {
-                    if (newPos > 0) {
-                        newPos = 0;
-                        state = "hidden";
-                    }
-                    else {
-                        newPos = -ListSwipeDecorator.ELEMENT_SIZE;
-                    }
+                else if (pos >= -ListSwipeDecorator.ELEMENT_SIZE / 2) {
+                    state = "hidden";
+                    pos = 0;
                 }
-                else {
-                    newPos = 0;
-                }
-                startPos = 0;
-                firstPos = 0;
-                newPos = Math.min(0, newPos);
                 var style = listItem.getDom().style;
-                style.webkitTransform = "translate3d(" + newPos + "px, 0, 0)";
-                style.transform = "translate3d(" + newPos + "px, 0, 0)";
+                style.webkitTransform = "translate3d(" + pos + "px, 0, 0)";
+                style.transform = "translate3d(" + pos + "px, 0, 0)";
+                startPos = 0;
             }, false);
         };
         ListSwipeDecorator.prototype.remove = function (listItem) {

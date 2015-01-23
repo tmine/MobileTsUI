@@ -89,7 +89,7 @@ module mtsui {
 
             var _this = this;
             var content = this.getContent();
-            content.addEventListener("touchend", function(){
+            content.addEventListener("touchend", function(e){
                 if(content.scrollTop < -50) {
                     refresh.style.position = "static";
                     refresh.style.height = "40px";
@@ -111,6 +111,7 @@ module mtsui {
         }
 
         public onRefresh(func: Function): void {
+            func();
         }
     }
 }

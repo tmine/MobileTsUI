@@ -47,7 +47,7 @@ declare module mtsui {
     class WindowManager {
         private static windowStack;
         private static open(window);
-        static getActiveWindow(): Window;
+        static getActiveWindow(): mtsui.Window;
         static openFullscreen(window: Window): void;
         static openModal(window: Window, closable: boolean): void;
         static closeWindow(window: Window): void;

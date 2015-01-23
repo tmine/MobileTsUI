@@ -93,6 +93,7 @@ module mtsui {
 
             var style = listItem.getDom().style;
             style.position = "relative";
+            style.overflow = "visible";
 
             var button = document.createElement("div");
             button.style.position = "absolute";
@@ -113,46 +114,44 @@ module mtsui {
             listItem.getDom().appendChild(button);
 
             var startPos = 0;
-            var firstPos = 0;
+            var pos = 0;
             var state = "hidden";
 
             (<ListItem>listItem).getItem().addEventListener('touchmove', function(in_e){
                 var e = <TouchEvent> in_e;
                 if(startPos == 0) startPos = e.pageX;
-                var newPos = e.pageX - startPos;
-                if(state == "visible") newPos -= ListSwipeDecorator.ELEMENT_SIZE;
+                var delta = startPos - e.pageX; // minus = right, plus = left
 
+                var direction = delta / Math.abs(delta);
+                if(isNaN(direction)) direction = 0;
+
+                delta = Math.abs(delta);
+                delta = Math.min(delta, ListSwipeDecorator.ELEMENT_SIZE);
+                pos = -1 * direction * delta;
+                if(state == "visible") pos = -ListSwipeDecorator.ELEMENT_SIZE + pos;
+
+                console.log(direction, delta, pos);
                 var style: any = listItem.getDom().style;
-                style.webkitTransform = "translate3d(" + newPos + "px, 0, 0)";
-                style.transform = "translate3d(" + newPos + "px, 0, 0)";
+                style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
+                style.transform = "translate3d(" + (pos) + "px, 0, 0)";
 
                 e.preventDefault();
             }, false);
 
             (<ListItem>listItem).getItem().addEventListener('touchend', function(in_e){
-                var e = <TouchEvent> in_e;
-                var newPos = e.pageX - startPos;
-
-                if(state == "hidden" && -newPos >= ListSwipeDecorator.ELEMENT_SIZE) {
-                    newPos = -ListSwipeDecorator.ELEMENT_SIZE;
+                if(pos <= -ListSwipeDecorator.ELEMENT_SIZE/2) {
                     state = "visible";
-                } else if(state == "visible" && newPos <= ListSwipeDecorator.ELEMENT_SIZE) {
-                    if(newPos > 0) {
-                        newPos = 0;
-                        state = "hidden";
-                    } else {
-                        newPos = -ListSwipeDecorator.ELEMENT_SIZE;
-                    }
-                } else {
-                    newPos = 0;
+                    pos = -ListSwipeDecorator.ELEMENT_SIZE;
+                } else if(pos >= -ListSwipeDecorator.ELEMENT_SIZE/2) {
+                    state = "hidden";
+                    pos = 0;
                 }
-                startPos = 0;
-                firstPos = 0;
-                newPos = Math.min(0, newPos);
 
                 var style: any = listItem.getDom().style;
-                style.webkitTransform = "translate3d(" + newPos + "px, 0, 0)";
-                style.transform = "translate3d(" + newPos + "px, 0, 0)";
+                style.webkitTransform = "translate3d(" + pos + "px, 0, 0)";
+                style.transform = "translate3d(" + pos + "px, 0, 0)";
+
+                startPos = 0;
             }, false);
         }
 
