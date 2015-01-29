@@ -92,7 +92,7 @@ module mtsui {
             content.addEventListener("touchend", function(e){
                 if(content.scrollTop < -50) {
                     refresh.style.position = "static";
-                    refresh.style.height = "40px";
+                    refresh.style.height = "60px";
                     refresh.style.top = "0";
                     refresh.style.padding = "0.5em";
                     refresh.insertBefore(icon.getDom(), refresh.firstChild);

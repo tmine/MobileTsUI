@@ -175,7 +175,7 @@ var mtsui;
             content.addEventListener("touchend", function (e) {
                 if (content.scrollTop < -50) {
                     refresh.style.position = "static";
-                    refresh.style.height = "40px";
+                    refresh.style.height = "60px";
                     refresh.style.top = "0";
                     refresh.style.padding = "0.5em";
                     refresh.insertBefore(icon.getDom(), refresh.firstChild);
@@ -558,6 +558,7 @@ var mtsui;
             this.value = value;
             this.deleteIcon = deleteIcon;
             this.color = color;
+            this.getDom().style.overflow = "hidden";
         }
         ListSwipeDecorator.prototype.add = function (listItem, deleteCallback) {
             this.value.add(listItem);
@@ -596,10 +597,11 @@ var mtsui;
                 pos = -1 * direction * delta;
                 if (state == "visible")
                     pos = -ListSwipeDecorator.ELEMENT_SIZE + pos;
+                pos = Math.min(pos, 0);
                 var style = listItem.getDom().style;
                 style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
                 style.transform = "translate3d(" + (pos) + "px, 0, 0)";
-                e.preventDefault();
+                //e.preventDefault();
             }, false);
             listItem.getItem().addEventListener('touchend', function (in_e) {
                 if (pos <= -ListSwipeDecorator.ELEMENT_SIZE / 2) {

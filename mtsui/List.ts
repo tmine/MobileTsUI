@@ -86,6 +86,7 @@ module mtsui {
 
         constructor(private value: List, private deleteIcon: Icon, private color: String){
             super(value);
+            this.getDom().style.overflow = "hidden";
         }
 
         public add(listItem: Component, deleteCallback?: Function): void{
@@ -130,11 +131,13 @@ module mtsui {
                 pos = -1 * direction * delta;
                 if(state == "visible") pos = -ListSwipeDecorator.ELEMENT_SIZE + pos;
 
+                pos = Math.min(pos, 0);
+
                 var style: any = listItem.getDom().style;
                 style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
                 style.transform = "translate3d(" + (pos) + "px, 0, 0)";
 
-                e.preventDefault();
+                //e.preventDefault();
             }, false);
 
             (<ListItem>listItem).getItem().addEventListener('touchend', function(in_e){
