@@ -162,6 +162,7 @@ var mtsui;
         __extends(RefreshablePage, _super);
         function RefreshablePage(icon, color, text, title) {
             _super.call(this, title);
+            // TODO: add css class
             var refresh = document.createElement("div");
             refresh.textContent = text.toString();
             refresh.style.position = "relative";
@@ -565,7 +566,9 @@ var mtsui;
             var style = listItem.getDom().style;
             style.position = "relative";
             style.overflow = "visible";
+            // TODO: add css class
             var button = document.createElement("div");
+            button.className = "swipe_icon_holder";
             button.style.position = "absolute";
             button.style.right = "-" + ListSwipeDecorator.ELEMENT_SIZE + "px";
             button.style.width = ListSwipeDecorator.ELEMENT_SIZE + "px";
@@ -586,6 +589,12 @@ var mtsui;
             var state = "hidden";
             listItem.getItem().addEventListener('touchmove', function (in_e) {
                 var e = in_e;
+                if (navigator.userAgent.match(/Android/i)) {
+                    e.preventDefault();
+                    if (e.targetTouches.length == 1) {
+                        e = e.targetTouches[0];
+                    }
+                }
                 if (startPos == 0)
                     startPos = e.pageX;
                 var delta = startPos - e.pageX; // minus = right, plus = left
@@ -601,7 +610,6 @@ var mtsui;
                 var style = listItem.getDom().style;
                 style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
                 style.transform = "translate3d(" + (pos) + "px, 0, 0)";
-                //e.preventDefault();
             }, false);
             listItem.getItem().addEventListener('touchend', function (in_e) {
                 if (pos <= -ListSwipeDecorator.ELEMENT_SIZE / 2) {

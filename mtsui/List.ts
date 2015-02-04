@@ -96,7 +96,9 @@ module mtsui {
             style.position = "relative";
             style.overflow = "visible";
 
+            // TODO: add css class
             var button = document.createElement("div");
+            button.className = "swipe_icon_holder";
             button.style.position = "absolute";
             button.style.right = "-" + ListSwipeDecorator.ELEMENT_SIZE + "px";
             button.style.width = ListSwipeDecorator.ELEMENT_SIZE + "px";
@@ -120,6 +122,13 @@ module mtsui {
 
             (<ListItem>listItem).getItem().addEventListener('touchmove', function(in_e){
                 var e = <TouchEvent> in_e;
+                if(navigator.userAgent.match(/Android/i)) {
+                    e.preventDefault();
+                    if((<any>e).targetTouches.length == 1) {
+                        e = (<any>e).targetTouches[0];
+                    }
+                }
+
                 if(startPos == 0) startPos = e.pageX;
                 var delta = startPos - e.pageX; // minus = right, plus = left
 
@@ -136,8 +145,6 @@ module mtsui {
                 var style: any = listItem.getDom().style;
                 style.webkitTransform = "translate3d(" + (pos) + "px, 0, 0)";
                 style.transform = "translate3d(" + (pos) + "px, 0, 0)";
-
-                //e.preventDefault();
             }, false);
 
             (<ListItem>listItem).getItem().addEventListener('touchend', function(in_e){

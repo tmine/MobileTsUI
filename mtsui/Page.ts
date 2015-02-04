@@ -78,6 +78,7 @@ module mtsui {
         constructor(icon: Icon, color: String, text: String, title?: String){
             super(title);
 
+            // TODO: add css class
             var refresh = document.createElement("div");
             refresh.textContent = text.toString();
             refresh.style.position = "relative";
