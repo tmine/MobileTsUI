@@ -2,9 +2,11 @@
 declare module mtsui {
     class Component extends ts.ui.View {
         private dom;
+        private children;
         constructor(template: any);
         add(component: Component): void;
         remove(component: Component): void;
+        getChildren(): ts.util.List<Component>;
         clear(): void;
         getDom(): HTMLElement;
     }

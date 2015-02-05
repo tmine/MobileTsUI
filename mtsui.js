@@ -11,17 +11,24 @@ var mtsui;
         __extends(Component, _super);
         function Component(template) {
             _super.call(this, template);
+            this.children = new ts.util.LinkedList();
             this.dom = document.createElement("div");
             this.dom.setAttribute("class", "mtsui component");
         }
         Component.prototype.add = function (component) {
             _super.prototype.getDom.call(this).appendChild(component.getDom());
+            this.children.add(component);
         };
         Component.prototype.remove = function (component) {
             _super.prototype.getDom.call(this).removeChild(component.getDom());
+            this.children.remove(component);
+        };
+        Component.prototype.getChildren = function () {
+            return this.children;
         };
         Component.prototype.clear = function () {
             _super.prototype.getDom.call(this).innerHTML = "";
+            this.children = new ts.util.LinkedList();
         };
         Component.prototype.getDom = function () {
             this.dom.appendChild(_super.prototype.getDom.call(this));
