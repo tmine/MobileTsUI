@@ -42,13 +42,13 @@ module mtsui {
 			window.getDom().onclick = function() {
                 if (event.stopPropagation) event.stopPropagation()
 				if (event) event.cancelBubble = true;
-            }
+            };
 
 			WindowManager.open(temp);
         }
 
         public static closeWindow(window: Window): void{
-            if(window == WindowManager.windowStack.peek()){
+            if(window == this.windowStack.peek()){
                 this.close();
             } else {
                 var windowStackArray = this.windowStack.toArray();

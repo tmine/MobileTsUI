@@ -31,9 +31,12 @@ declare module mtsui {
         private header;
         private body;
         private div;
+        private position;
         constructor(title?: String);
         beforeDisplay(): void;
         beforeHide(): void;
+        show(transition: any): void;
+        hide(side: any, transition: any): void;
         deinit(): void;
         addHeader(header: Header): void;
         getHeader(): Header;
@@ -60,12 +63,14 @@ declare module mtsui {
     class Window extends ts.ui.View {
         private pageStack;
         constructor(title?: String);
+        private removePageFromDom(page);
+        removePage(page: Page): void;
         getActualPage(): Page;
         setActualPage(page: Page): void;
         deleteStack(): void;
         close(): void;
         deinit(): void;
-        navigateTo(page: Page, transitiontype?: String): void;
+        navigateTo(page: Page): void;
         back(): void;
     }
 }

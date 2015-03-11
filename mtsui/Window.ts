@@ -18,10 +18,25 @@ module mtsui {
             this.pageStack.push(page);
         }
 
-        public getActualPage(): Page {
-            var page: Page = this.pageStack.peek();
+        private removePageFromDom(page: Page){
+            page.deinit();
+            this.getDom().removeChild(page.getDom());
+        }
 
-            return page;
+        public removePage(page: Page): void {
+            if(this.pageStack.empty()) return;
+
+            if(page == this.pageStack.peek()){
+                this.removePageFromDom(page);
+            } else {
+                var pageStackArray = this.pageStack.toArray();
+                this.pageStack = new ts.util.Stack<Page>(pageStackArray.splice(pageStackArray.indexOf(page, 1)));
+                this.removePageFromDom(page);
+            }
+        }
+
+        public getActualPage(): Page {
+            return this.pageStack.peek();
         }
 
         public setActualPage(page: Page): void {
@@ -35,8 +50,7 @@ module mtsui {
             while(this.pageStack.size() > 0){
                 var page: Page = this.pageStack.pop();
                 if(page){
-                    page.deinit();
-                    this.getDom().removeChild(page.getDom());
+                    this.removePageFromDom(page);
                 } 
             }
         }
@@ -50,26 +64,16 @@ module mtsui {
             super.deinit();
         }
 
-        public navigateTo(page: Page, transitiontype?: String): void {            
-            if(!transitiontype) transitiontype = "slide";
-            
+        public navigateTo(page: Page): void {
             var oldPage: Page = this.pageStack.peek();
-
             this.getDom().appendChild(page.getDom());
-            page.getDom().className += " transition " + transitiontype + " hide right";
 
+            page.hide("right", "transition slide");
             setTimeout(function() {
-                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide right", " transition " + transitiontype + " hide in");
+                page.show("transition slide");
             }, 0);
 
-            setTimeout(function() {
-                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide in", "");
-            }, 1000);
-
-            if(oldPage){
-                oldPage.beforeHide();
-                oldPage.getDom().className += " transition " + transitiontype + " hide left";
-            }
+            oldPage.hide("left", "transition slide");
 
             this.pageStack.push(page);
         }
@@ -79,20 +83,13 @@ module mtsui {
             var page: Page = this.pageStack.peek();
 
             if(page) {
-                page.beforeDisplay();
-                var superdom = this.getDom();
-                setTimeout(function(){
-                    page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
-                }, 0);
+                page.show("transition slide");
             }
 
-            oldPage.getDom().className += " transition slide hide right";
+            oldPage.hide("right", "transition slide");
             setTimeout(function() {
-                oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
                 oldPage.deinit();
-                if(oldPage.getDom().parentNode == superdom) superdom.removeChild(oldPage.getDom());
-                
-                page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
+                oldPage.getDom().parentNode.removeChild(oldPage.getDom());
             }, 1000);
 
             if(this.pageStack.empty()) this.close();

@@ -187,7 +187,10 @@ module mtsui {
             this.window.getDom().appendChild(overlay);
             
             if (this.menu.className.indexOf("show") == -1) this.menu.className += " show";
-            if (page.getDom().className.indexOf("hide " + this.position) == -1) page.getDom().className += " hide " + this.position;
+            var side = (this.position == "right") ? "left" : "right";
+            side = this.position.toString();
+            page.hide(side, "");
+            /*if (page.getDom().className.indexOf("hide " + this.position) == -1) page.getDom().className += " hide " + this.position;*/
             if (overlay.className.indexOf(" menuoverlay hide " + this.position) == -1) overlay.className += " menuoverlay hide " + this.position;
 
             var _this = this;
@@ -205,8 +208,9 @@ module mtsui {
             
             var overlay = this.window.getDom().querySelector(".menuoverlay");
             if(overlay) this.window.getDom().removeChild(overlay);
-            
-            if (page.getDom().className.indexOf(" hide " + this.position) != -1) page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");
+
+            page.show("");
+            /*if (page.getDom().className.indexOf(" hide " + this.position) != -1) page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");*/
             
             var _this = this;
             setTimeout(function(){

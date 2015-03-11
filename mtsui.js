@@ -137,6 +137,19 @@ var mtsui;
         };
         Page.prototype.beforeHide = function () {
         };
+        Page.prototype.show = function (transition) {
+            this.beforeDisplay();
+            this.getDom().className = this.getDom().className.replace(" " + transition + " hide " + this.position, " " + transition + " hide in");
+            var _this = this;
+            setTimeout(function () {
+                _this.getDom().className = _this.getDom().className.replace(" " + transition + " hide in", "");
+            }, 1000);
+        };
+        Page.prototype.hide = function (side, transition) {
+            this.position = side;
+            this.beforeHide();
+            this.getDom().className += " " + transition + " hide " + side;
+        };
         Page.prototype.deinit = function () {
             this.beforeHide();
         };
@@ -248,7 +261,7 @@ var mtsui;
             WindowManager.open(temp);
         };
         WindowManager.closeWindow = function (window) {
-            if (window == WindowManager.windowStack.peek()) {
+            if (window == this.windowStack.peek()) {
                 this.close();
             }
             else {
@@ -291,9 +304,24 @@ var mtsui;
             instance.appendChild(page.getDom());
             this.pageStack.push(page);
         }
+        Window.prototype.removePageFromDom = function (page) {
+            page.deinit();
+            this.getDom().removeChild(page.getDom());
+        };
+        Window.prototype.removePage = function (page) {
+            if (this.pageStack.empty())
+                return;
+            if (page == this.pageStack.peek()) {
+                this.removePageFromDom(page);
+            }
+            else {
+                var pageStackArray = this.pageStack.toArray();
+                this.pageStack = new ts.util.Stack(pageStackArray.splice(pageStackArray.indexOf(page, 1)));
+                this.removePageFromDom(page);
+            }
+        };
         Window.prototype.getActualPage = function () {
-            var page = this.pageStack.peek();
-            return page;
+            return this.pageStack.peek();
         };
         Window.prototype.setActualPage = function (page) {
             var oldPage = this.pageStack.pop();
@@ -304,8 +332,7 @@ var mtsui;
             while (this.pageStack.size() > 0) {
                 var page = this.pageStack.pop();
                 if (page) {
-                    page.deinit();
-                    this.getDom().removeChild(page.getDom());
+                    this.removePageFromDom(page);
                 }
             }
         };
@@ -316,41 +343,26 @@ var mtsui;
             this.deleteStack();
             _super.prototype.deinit.call(this);
         };
-        Window.prototype.navigateTo = function (page, transitiontype) {
-            if (!transitiontype)
-                transitiontype = "slide";
+        Window.prototype.navigateTo = function (page) {
             var oldPage = this.pageStack.peek();
             this.getDom().appendChild(page.getDom());
-            page.getDom().className += " transition " + transitiontype + " hide right";
+            page.hide("right", "transition slide");
             setTimeout(function () {
-                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide right", " transition " + transitiontype + " hide in");
+                page.show("transition slide");
             }, 0);
-            setTimeout(function () {
-                page.getDom().className = page.getDom().className.replace(" transition " + transitiontype + " hide in", "");
-            }, 1000);
-            if (oldPage) {
-                oldPage.beforeHide();
-                oldPage.getDom().className += " transition " + transitiontype + " hide left";
-            }
+            oldPage.hide("left", "transition slide");
             this.pageStack.push(page);
         };
         Window.prototype.back = function () {
             var oldPage = this.pageStack.pop();
             var page = this.pageStack.peek();
             if (page) {
-                page.beforeDisplay();
-                var superdom = this.getDom();
-                setTimeout(function () {
-                    page.getDom().className = page.getDom().className.replace(" transition slide hide left", " transition slide hide in");
-                }, 0);
+                page.show("transition slide");
             }
-            oldPage.getDom().className += " transition slide hide right";
+            oldPage.hide("right", "transition slide");
             setTimeout(function () {
-                oldPage.getDom().className = oldPage.getDom().className.replace(" transition slide hide right", "");
                 oldPage.deinit();
-                if (oldPage.getDom().parentNode == superdom)
-                    superdom.removeChild(oldPage.getDom());
-                page.getDom().className = page.getDom().className.replace(" transition slide hide in", "");
+                oldPage.getDom().parentNode.removeChild(oldPage.getDom());
             }, 1000);
             if (this.pageStack.empty())
                 this.close();
@@ -806,8 +818,10 @@ var mtsui;
             this.window.getDom().appendChild(overlay);
             if (this.menu.className.indexOf("show") == -1)
                 this.menu.className += " show";
-            if (page.getDom().className.indexOf("hide " + this.position) == -1)
-                page.getDom().className += " hide " + this.position;
+            var side = (this.position == "right") ? "left" : "right";
+            side = this.position.toString();
+            page.hide(side, "");
+            /*if (page.getDom().className.indexOf("hide " + this.position) == -1) page.getDom().className += " hide " + this.position;*/
             if (overlay.className.indexOf(" menuoverlay hide " + this.position) == -1)
                 overlay.className += " menuoverlay hide " + this.position;
             var _this = this;
@@ -823,8 +837,8 @@ var mtsui;
             var overlay = this.window.getDom().querySelector(".menuoverlay");
             if (overlay)
                 this.window.getDom().removeChild(overlay);
-            if (page.getDom().className.indexOf(" hide " + this.position) != -1)
-                page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");
+            page.show("");
+            /*if (page.getDom().className.indexOf(" hide " + this.position) != -1) page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");*/
             var _this = this;
             setTimeout(function () {
                 if (_this.menu.className.indexOf(" show") != -1)

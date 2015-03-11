@@ -10,6 +10,7 @@ module mtsui {
         private header: Header;
         private body: HTMLElement;
         private div: HTMLElement;
+        private position: String;
 
         constructor(title?: String) {
             this.div = document.createElement("div");
@@ -41,6 +42,21 @@ module mtsui {
         }
 
         public beforeHide(): void {
+        }
+
+        public show(transition): void {
+            this.beforeDisplay();
+            this.getDom().className = this.getDom().className.replace(" "+transition+" hide " + this.position, " "+transition+" hide in");
+            var _this = this;
+            setTimeout(function() {
+                _this.getDom().className = _this.getDom().className.replace(" "+transition+" hide in", "");
+            }, 1000);
+        }
+
+        public hide(side, transition): void {
+            this.position = side;
+            this.beforeHide();
+            this.getDom().className += " "+transition+" hide " + side;
         }
 
         public deinit(): void {
