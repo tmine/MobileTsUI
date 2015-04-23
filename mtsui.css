@@ -186,7 +186,7 @@
 	-webkit-overflow-scrolling: touch;
 }
 
-.mtsui.window .mtsui.page .mtsui.header + .mtsui.content {
+.mtsui.window .mtsui.page .mtsui.content {
 	top: 40px; /* Header height */
 }
 

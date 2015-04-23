@@ -96,6 +96,7 @@ module mtsui {
 
             // TODO: add css class
             var refresh = document.createElement("div");
+            refresh.setAttribute("class", "mtsui refresh");
             refresh.textContent = text.toString();
             refresh.style.position = "relative";
             refresh.style.height = "0";

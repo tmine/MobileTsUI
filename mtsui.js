@@ -184,6 +184,7 @@ var mtsui;
             _super.call(this, title);
             // TODO: add css class
             var refresh = document.createElement("div");
+            refresh.setAttribute("class", "mtsui refresh");
             refresh.textContent = text.toString();
             refresh.style.position = "relative";
             refresh.style.height = "0";
@@ -818,10 +819,7 @@ var mtsui;
             this.window.getDom().appendChild(overlay);
             if (this.menu.className.indexOf("show") == -1)
                 this.menu.className += " show";
-            var side = (this.position == "right") ? "left" : "right";
-            side = this.position.toString();
-            page.hide(side, "");
-            /*if (page.getDom().className.indexOf("hide " + this.position) == -1) page.getDom().className += " hide " + this.position;*/
+            page.hide(this.position.toString(), "");
             if (overlay.className.indexOf(" menuoverlay hide " + this.position) == -1)
                 overlay.className += " menuoverlay hide " + this.position;
             var _this = this;
@@ -838,7 +836,6 @@ var mtsui;
             if (overlay)
                 this.window.getDom().removeChild(overlay);
             page.show("");
-            /*if (page.getDom().className.indexOf(" hide " + this.position) != -1) page.getDom().className = page.getDom().className.replace(" hide " + this.position, "");*/
             var _this = this;
             setTimeout(function () {
                 if (_this.menu.className.indexOf(" show") != -1)
