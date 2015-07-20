@@ -9,9 +9,11 @@ var mtsui;
 (function (mtsui) {
     var Component = (function (_super) {
         __extends(Component, _super);
-        function Component(template) {
+        function Component(template, data) {
             _super.call(this, template);
             this.children = new ts.util.LinkedList();
+            if (data)
+                this.supplant(data);
             this.dom = document.createElement("div");
             this.dom.setAttribute("class", "mtsui component");
         }

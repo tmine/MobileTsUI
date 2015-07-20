@@ -5,9 +5,9 @@ module mtsui {
         private dom: HTMLElement;
         private children: ts.util.LinkedList<Component> = new ts.util.LinkedList<Component>();
 
-        constructor(template: any) {
+        constructor(template: any, data?: Object) {
             super(template);
-
+            if(data) this.supplant(data);
             this.dom = document.createElement("div");
             this.dom.setAttribute("class", "mtsui component");
         }
